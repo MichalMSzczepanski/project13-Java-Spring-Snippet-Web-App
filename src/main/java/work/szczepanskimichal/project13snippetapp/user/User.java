@@ -2,8 +2,8 @@ package work.szczepanskimichal.project13snippetapp.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import work.szczepanskimichal.project13snippetapp.role.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;

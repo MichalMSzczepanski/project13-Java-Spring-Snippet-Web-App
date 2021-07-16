@@ -1,4 +1,4 @@
-package work.szczepanskimichal.project13snippetapp.user;
+package work.szczepanskimichal.project13snippetapp.role;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
