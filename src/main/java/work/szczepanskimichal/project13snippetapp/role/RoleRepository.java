@@ -9,4 +9,5 @@ import javax.transaction.Transactional;
 @Transactional
 public interface RoleRepository extends JpaRepository<Role, Integer> {
     Role findByName(String name);
+    // TODO create full CRUD for roles in repository
 }

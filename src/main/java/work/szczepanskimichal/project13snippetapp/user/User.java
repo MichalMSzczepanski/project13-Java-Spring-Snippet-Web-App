@@ -24,17 +24,17 @@ public class User {
 
     @Column(unique = true)
     @Email
-    @NotBlank
+    @NotBlank(message="{email.not.blank.and.unique}")
     private String email;
 
     @Column(nullable = false, unique = true, length = 50)
     @Size(min = 3, max = 50)
-    @NotBlank
+    @NotBlank(message="{username.not.blank.and.unique}")
     private String username;
 
     //  1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and at least 8 characters long
-    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}")
-    @NotBlank
+    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
+    @NotBlank(message="{password.blank}")
     private String password;
 
     private int enabled;
