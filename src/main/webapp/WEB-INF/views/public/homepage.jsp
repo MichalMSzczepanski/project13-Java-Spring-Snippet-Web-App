@@ -17,9 +17,9 @@ home page available to all
 
 <sec:authorize access="!isAuthenticated()">
     <a href="/login">login</a>
+    <a href="/create-account">create account</a><br><br>
 </sec:authorize>
 
-<a href="/create-account">create account</a>
 
 
 <sec:authorize access="isAuthenticated()">
@@ -37,7 +37,7 @@ home page available to all
 </sec:authorize>
 
 <sec:authorize access="hasRole('USER')">
-    <a href="/user/dashboard">go to user dashboard</a>
+    <a href="/dashboard">go to user dashboard</a>
 </sec:authorize>
 
 <br>

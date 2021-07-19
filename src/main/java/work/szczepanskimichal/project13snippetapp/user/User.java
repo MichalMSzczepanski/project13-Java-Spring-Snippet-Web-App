@@ -7,6 +7,7 @@ import work.szczepanskimichal.project13snippetapp.role.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class User {
     private String username;
 
     //  1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and at least 8 characters long
-    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
+//    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
     @NotBlank(message="{password.blank}")
     private String password;
 
@@ -46,8 +47,13 @@ public class User {
 
     private String apiKey;
 
-    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.username = username;
-        this.password = password;
-    }
+    private String accountKeyValidation;
+    private LocalDateTime accountKeCreated;
+    private LocalDateTime accountKeyExpirationDate;
+
+
+//    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+//        this.username = username;
+//        this.password = password;
+//    }
 }

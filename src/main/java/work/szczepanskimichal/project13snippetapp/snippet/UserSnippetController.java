@@ -17,10 +17,10 @@ import work.szczepanskimichal.project13snippetapp.user.User;
 @Secured("ROLE_USER")
 public class UserSnippetController {
 
-    @RequestMapping("/dashboard")
-    public String getUserSnippets() {
-        return "user/dashboard";
-    }
+//    @RequestMapping("/dashboard")
+//    public String getUserSnippets() {
+//        return "user/dashboard";
+//    }
 
 //    @GetMapping("/info")
 //    @ResponseBody

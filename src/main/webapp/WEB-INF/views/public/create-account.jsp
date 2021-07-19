@@ -8,7 +8,7 @@
             Create Account
         </sec:authorize>
         <sec:authorize access="hasRole('USER')">
-            Update account
+            This seems... fishy ><^>
         </sec:authorize>
     </title>
     <%@include file="../bootstrap.jsp" %>
@@ -17,12 +17,11 @@
 <div class="container">
     <div style="height: 800px;">
         <div class="h-100 p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
+            <sec:authorize access="hasRole('USER')">
+                You already have an account mate, what are you doing here?
+            </sec:authorize>
             <sec:authorize access="!isAuthenticated()">
                 <h2>Create Account</h2><br>
-            </sec:authorize>
-            <sec:authorize access="hasRole('USER')">
-                <h2>Update account</h2><br>
-            </sec:authorize>
 
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="user">
                 <form:hidden path="id"/>
@@ -50,12 +49,16 @@
 
                 <input type="submit">
             </form:form>
-
-            <a class="btn btn-warning btn-lg" href="/" role="button">Homepage</a><br>
-            <sec:authorize access="!isAuthenticated()">
+                <br>
                 <a class="btn btn-secondary btn-lg" href="/login" role="button">Login</a>
             </sec:authorize>
-
+            <a class="btn btn-warning btn-lg" href="/" role="button">Homepage</a><br>
+            <sec:authorize access="isAuthenticated()">
+                <form action="<c:url value="/logout"/>" method="post">
+                    <input type="submit" value="Wyloguj">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
+            </sec:authorize>
 
         </div>
     </div>

@@ -1,16 +1,23 @@
 package work.szczepanskimichal.project13snippetapp.user;
 
-import com.sun.xml.bind.v2.TODO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
+import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.util.Random;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,59 +25,58 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/create-account")
-    public String createUserGet(Model model) {
-        model.addAttribute("user", new User());
-        return "public/create-update-account";
+    @GetMapping("/update-user-details")
+    public String updateAccountGet(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
+        UserDetailsUpdateDTO userDetailsUpdateDTO = new UserDetailsUpdateDTO();
+        userDetailsUpdateDTO = userDetailsUpdateDTO.userDTOFilledOut(currentUser);
+        model.addAttribute("userDetails", userDetailsUpdateDTO);
+        System.out.println(userDetailsUpdateDTO);
+        return "user/update-user-details";
     }
 
-    @PostMapping("/create-account")
-    public String createUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (validateCreateAndUpdateErrors(user, result, req, model)) return "create-update-account";
-        user.setEnabled(1);
-        user.setApiKey("123456");
-        userService.saveUser(user);
-        return "redirect:/login";
-        // TODO success page?
+    @PostMapping("/update-user-details")
+    public String updateUserPost(@ModelAttribute("userDetails") @Valid UserDetailsUpdateDTO userDetailsUpdateDTO, BindingResult result, @AuthenticationPrincipal CurrentUser currentUser) {
+        if (result.hasErrors()) {
+            return "user/update-user-details";
+        }
+        User updatedUser = currentUser.getUser();
+        updatedUser.setUsername(userDetailsUpdateDTO.getUsername());
+        updatedUser.setEmail(userDetailsUpdateDTO.getEmail());
+        userService.update(updatedUser);
+        return "redirect:/dashboard";
     }
 
-    @GetMapping("/update-account")
-    public String updateAccountGet(Principal principal, Model model) {
-        model.addAttribute("user", userService.findByUserEmail(principal.getName()));
-        return "public/create-update-account";
+    @GetMapping("/update-user-password")
+    public String updateUserPasswordGet(Model model) {
+        model.addAttribute("userPasswords", new UserPasswordUpdateDTO());
+        return "user/update-user-password";
+        //    TODO send email with link to change password?
     }
 
-    @PostMapping("/update-account")
-    public String updateUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (validateCreateAndUpdateErrors(user, result, req, model)) return "create-update-account";
-        user.setEnabled(user.getEnabled());
-        user.setApiKey(user.getApiKey());
-        userService.saveUser(user);
+    @PostMapping("/update-user-password")
+    public String updateUserPasswordPost(@ModelAttribute("userPasswords") @Valid UserPasswordUpdateDTO userPasswordUpdateDTO, BindingResult result, Model model, HttpServletRequest request, @AuthenticationPrincipal CurrentUser currentUser) {
+        if (result.hasErrors()) {
+            return "user/update-user-password";
+        }
+        if(!(request.getParameter("password").equals(request.getParameter("passwordConfirmation")))
+                || request.getParameter("password") == ""
+                || request.getParameter("passwordConfirmation") == "") {
+            model.addAttribute("passwordMismatch", true);
+            return "user/update-user-password";
+        }
+        userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
         return "redirect:/dashboard";
     }
 
 //    TODO details in user dashboard
     @GetMapping("/dashboard")
-    public String userDashboard(Model model) {
+    public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("currentUserName", currentUser.getUser().getUsername());
 
         // send user snippet categories
         // send user sippets
 
         return "/user/dashboard";
     }
-
-//    error validation in create and update actions
-    private boolean validateCreateAndUpdateErrors(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (result.hasErrors()) {
-            return true;
-        }
-        if(!(req.getParameter("password").equals(req.getParameter("passwordConfirmation"))) || req.getParameter("password") == "" || req.getParameter("passwordConfirmation") == "" ) {
-            model.addAttribute("passwordMismatch", true);
-            return true;
-        }
-        user.setPassword(req.getParameter("password"));
-        return false;
-    }
-
 
 }

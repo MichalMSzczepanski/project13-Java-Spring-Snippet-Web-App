@@ -6,13 +6,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
 
 import java.util.HashSet;
 import java.util.Set;
 
-// does NOT work with ANT of these annotations... because bean is defined in config file
 public class SpringDataUserDetailsService implements UserDetailsService {
 
     private UserService userService;
@@ -26,11 +26,13 @@ public class SpringDataUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         User user = userService.findByUserName(username);
         if (user == null) {throw new UsernameNotFoundException(username); }
+        // TODO create custom exception for not enabled user trying to log in
+        if(user.getEnabled() == 0) {throw new UsernameNotFoundException(username); }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         user.getRoles().forEach(r ->
                 grantedAuthorities.add(new SimpleGrantedAuthority(r.getName())));
-        // changed to username from email
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+        return new CurrentUser(user.getUsername(),user.getPassword(), grantedAuthorities, user);
     }
+
 
 }

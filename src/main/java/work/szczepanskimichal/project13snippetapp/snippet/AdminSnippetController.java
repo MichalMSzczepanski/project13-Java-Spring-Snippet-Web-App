@@ -17,10 +17,10 @@ import work.szczepanskimichal.project13snippetapp.user.User;
 @Secured("ROLE_ADMIN")
 public class AdminSnippetController {
 
-    @RequestMapping("/dashboard")
-    public String getAdminDashboard() {
-        return "admin/dashboard";
-    }
+//    @RequestMapping("/dashboard")
+//    public String getAdminDashboard() {
+//        return "admin/dashboard";
+//    }
 
 //    @GetMapping("/details")
 //    @ResponseBody

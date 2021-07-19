@@ -91,6 +91,13 @@
             <scope>test</scope>
         </dependency>
 
+<!--        send emails for spring boot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>2.3.12.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>
