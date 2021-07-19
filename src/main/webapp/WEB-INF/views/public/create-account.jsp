@@ -26,7 +26,7 @@
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="user">
                 <form:hidden path="id"/>
                 <form:hidden path="enabled"/>
-                <form:hidden path="roles"/>
+                <form:hidden path="role"/>
                 <form:hidden path="apiKey"/>
 
                 Username <span title="<spring:message code="username.not.blank.and.unique"/>">&#9432;</span><br>

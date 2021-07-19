@@ -29,8 +29,7 @@ public class SpringDataUserDetailsService implements UserDetailsService {
         // TODO create custom exception for not enabled user trying to log in
         if(user.getEnabled() == 0) {throw new UsernameNotFoundException(username); }
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        user.getRoles().forEach(r ->
-                grantedAuthorities.add(new SimpleGrantedAuthority(r.getName())));
+        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
         return new CurrentUser(user.getUsername(),user.getPassword(), grantedAuthorities, user);
     }
 
