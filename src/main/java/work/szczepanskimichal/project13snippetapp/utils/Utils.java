@@ -24,6 +24,7 @@ public class Utils {
         colors.add("muted");
         colors.add("white");
 
+//        temporarry list
         languages = new ArrayList<>();
         languages.add("Java");
         languages.add("Python");

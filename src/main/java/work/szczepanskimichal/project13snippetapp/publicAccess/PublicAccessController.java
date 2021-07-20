@@ -46,7 +46,7 @@ public class PublicAccessController {
 
     @PostMapping("/create-account")
     public String createUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) throws NoSuchAlgorithmException {
-        if (validateCreateAndUpdateErrors(user, result, req, model)) return "create-account";
+        if (validateCreateAndUpdateErrors(user, result, req, model)) return "public/create-account";
         user.setEnabled(0);
         // TODO create api key generator
         Random rand = new Random();

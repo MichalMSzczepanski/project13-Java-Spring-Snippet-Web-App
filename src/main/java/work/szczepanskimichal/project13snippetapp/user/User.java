@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import work.szczepanskimichal.project13snippetapp.role.Role;
+import work.szczepanskimichal.project13snippetapp.validator.UniqueEmail;
+import work.szczepanskimichal.project13snippetapp.validator.UniqueUsername;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,11 +28,13 @@ public class User {
     @Column(unique = true)
     @Email
     @NotBlank(message="{email.not.blank.and.unique}")
+    @UniqueEmail // custom validator
     private String email;
 
     @Column(nullable = false, unique = true, length = 50)
     @Size(min = 3, max = 50)
     @NotBlank(message="{username.not.blank.and.unique}")
+    @UniqueUsername // custom validator
     private String username;
 
     //  1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and at least 8 characters long
