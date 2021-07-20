@@ -11,8 +11,8 @@ import javax.validation.ConstraintValidatorContext;
 
 public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, User> {
 
-    @Autowired
-    private UserService userService;
+//    @Autowired
+//    private UserService userService;
 
     @Override
     public void initialize(PasswordMatch constraintAnnotation) {
@@ -22,11 +22,11 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
     public boolean isValid(User user, ConstraintValidatorContext constraintValidatorContext) {
         String password = user.getPassword();
         String passwordConfirmation = user.getPasswordConfirmation();
-        if (password.equals(passwordConfirmation) || password != "" || passwordConfirmation != "") {
+        if (!password.equals(passwordConfirmation) || password == "" || passwordConfirmation != "") {
             constraintValidatorContext.buildConstraintViolationWithTemplate("{passwords.dont.match}").addPropertyNode("password").addConstraintViolation();
-            return false;
-        } else {
             return true;
+        } else {
+            return false;
         }
     }
 }
