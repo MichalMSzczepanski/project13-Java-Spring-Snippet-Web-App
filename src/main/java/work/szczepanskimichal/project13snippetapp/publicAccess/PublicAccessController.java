@@ -25,7 +25,7 @@ public class PublicAccessController {
     private final EmailService emailService;
 
     @RequestMapping("/")
-    public String getPublicHomepage(HttpSession session) {
+    public String getPublicHomepage() {
         return "public/homepage";
     }
 
@@ -46,21 +46,21 @@ public class PublicAccessController {
 
     @PostMapping("/create-account")
     public String createUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) throws NoSuchAlgorithmException {
-        if (validateCreateAndUpdateErrors(user, result, req, model)) return "public/create-account";
+        if (result.hasErrors()) {
+            return "public/create-account";
+        }
         user.setEnabled(0);
-        // TODO create api key generator
+        // TODO create api key generator class with methods
         Random rand = new Random();
         int upperbound = 100000;
         int apiKey = rand.nextInt(upperbound);
         user.setApiKey(String.valueOf(apiKey));
-        // TODO create key generator
+        // TODO create validation key generator class with methods
         int accountKeyValidation = rand.nextInt(upperbound);
         user.setAccountKeyValidation(String.valueOf(accountKeyValidation));
         user.setAccountKeCreated(LocalDateTime.now());
         user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
         emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "Confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
-        System.out.println(user.getEmail());
-        System.out.println(user.getAccountKeyValidation());
         userService.saveUser(user);
         return "public/confirm-user-email";
     }
@@ -77,20 +77,5 @@ public class PublicAccessController {
         }
         return "redirect:/login";
     }
-
-    //    error validation in create and update actions
-    private boolean validateCreateAndUpdateErrors(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (result.hasErrors()) {
-            return true;
-        }
-        if(!(req.getParameter("password").equals(req.getParameter("passwordConfirmation"))) || req.getParameter("password") == "" || req.getParameter("passwordConfirmation") == "" ) {
-            model.addAttribute("passwordMismatch", true);
-            return true;
-        }
-        user.setPassword(req.getParameter("password"));
-        return false;
-    }
-
-
 
 }

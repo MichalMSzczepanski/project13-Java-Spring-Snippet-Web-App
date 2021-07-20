@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import work.szczepanskimichal.project13snippetapp.role.Role;
+import work.szczepanskimichal.project13snippetapp.validator.PasswordMatch;
 import work.szczepanskimichal.project13snippetapp.validator.UniqueEmail;
 import work.szczepanskimichal.project13snippetapp.validator.UniqueUsername;
 
@@ -17,6 +18,7 @@ import java.util.Set;
 @Table (name = User.TABLE_NAME)
 @Data
 @NoArgsConstructor
+@PasswordMatch
 public class User {
 
     static final String TABLE_NAME = "users";
@@ -41,6 +43,8 @@ public class User {
 //    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
     @NotBlank(message="{password.blank}")
     private String password;
+    @Transient
+    private String passwordConfirmation;
 
     private int enabled;
 

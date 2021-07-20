@@ -1,23 +1,17 @@
 package work.szczepanskimichal.project13snippetapp.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.AccessType;
 import org.springframework.stereotype.Component;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-@Component
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
-    private UserService userService;
-
-    public UniqueUsernameValidator() {}
-
     @Autowired
-    public UniqueUsernameValidator(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @Override
     public void initialize(UniqueUsername constraintAnnotation) {

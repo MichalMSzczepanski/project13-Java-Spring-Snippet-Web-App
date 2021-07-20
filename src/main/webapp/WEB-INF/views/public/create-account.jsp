@@ -38,14 +38,19 @@
                 <form:errors path="email"/><br>
 
                 password <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
-                <input type="password" name="password" path="password"/><br>
-
+                <form:input type="password" name="password" path="password" /><br>
                 confirm password<br>
-                <input type="password" name="passwordConfirmation"/><br>
-                <c:if test="${not empty passwordMismatch}">
-                        <spring:message code="passwords.dont.match"/>
-                </c:if>
+                <form:input type="password" name="passwordConfirmation" path="passwordConfirmation" /><br>
                 <form:errors path="password"/><br>
+
+<%--                password <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>--%>
+<%--                <input type="password" name="password" path="password"/><br>--%>
+<%--                confirm password<br>--%>
+<%--                <input type="password" name="passwordConfirmation"/><br>--%>
+<%--                <c:if test="${not empty passwordMismatch}">--%>
+<%--                        <spring:message code="passwords.dont.match"/>--%>
+<%--                </c:if>--%>
+<%--                <form:errors path="password"/><br>--%>
 
                 <input type="submit">
             </form:form>
