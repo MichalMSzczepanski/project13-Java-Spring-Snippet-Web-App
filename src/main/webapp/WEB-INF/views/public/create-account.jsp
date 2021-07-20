@@ -38,9 +38,9 @@
                 <form:errors path="email"/><br>
 
                 password <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
-                <form:input type="password" name="password" path="password" /><br>
+                <form:password  name="password" path="password" /><br>
                 confirm password<br>
-                <form:input type="password" name="passwordConfirmation" path="passwordConfirmation" /><br>
+                <form:password name="passwordConfirmation" path="passwordConfirmation" /><br>
                 <form:errors path="password"/><br>
 
 <%--                password <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>--%>

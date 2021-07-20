@@ -24,9 +24,9 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
         String passwordConfirmation = user.getPasswordConfirmation();
         if (!password.equals(passwordConfirmation) || password == "" || passwordConfirmation != "") {
             constraintValidatorContext.buildConstraintViolationWithTemplate("{passwords.dont.match}").addPropertyNode("password").addConstraintViolation();
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 }
