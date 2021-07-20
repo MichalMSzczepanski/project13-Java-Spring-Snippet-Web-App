@@ -5,10 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
 import work.szczepanskimichal.project13snippetapp.utils.EmailService;
@@ -21,6 +18,7 @@ import java.util.Random;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -43,7 +41,7 @@ public class UserController {
         updatedUser.setUsername(userDetailsUpdateDTO.getUsername());
         updatedUser.setEmail(userDetailsUpdateDTO.getEmail());
         userService.update(updatedUser);
-        return "redirect:/dashboard";
+        return "redirect:/user/dashboard";
     }
 
     @GetMapping("/update-user-password")
@@ -65,7 +63,7 @@ public class UserController {
             return "user/update-user-password";
         }
         userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
-        return "redirect:/dashboard";
+        return "redirect:/user/dashboard";
     }
 
 //    TODO details in user dashboard

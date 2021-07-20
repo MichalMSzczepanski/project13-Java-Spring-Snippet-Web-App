@@ -37,7 +37,7 @@ home page available to all
 </sec:authorize>
 
 <sec:authorize access="hasRole('USER')">
-    <a href="/dashboard">go to user dashboard</a>
+    <a href="/user/dashboard">go to user dashboard</a>
 </sec:authorize>
 
 <br>

@@ -9,9 +9,9 @@ hi ${currentUserName}!<br>
 user snippet page available to users only
 
 <br>
-<a href="/update-user-details">update user details</a>
+<a href="/user/update-user-details">update user details</a>
 <br>
-<a href="/update-user-password">update user password</a>
+<a href="/user/update-user-password">update user password</a>
 <br>
 <form action="<c:url value="/logout"/>" method="post">
     <input class="fa fa-id-badge" type="submit" value="Wyloguj usera">
