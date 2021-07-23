@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
+import work.szczepanskimichal.project13snippetapp.validator.UniqueEmail;
+import work.szczepanskimichal.project13snippetapp.validator.UniqueUsername;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +13,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
+@UniqueUsername
+@UniqueEmail
 public class UserDetailsUpdateDTO {
 
     @Email

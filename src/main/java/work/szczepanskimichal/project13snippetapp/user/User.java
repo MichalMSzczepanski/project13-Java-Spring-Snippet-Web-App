@@ -18,7 +18,6 @@ import java.util.Set;
 @Table (name = User.TABLE_NAME)
 @Data
 @NoArgsConstructor
-@PasswordMatch
 public class User {
 
     static final String TABLE_NAME = "users";
@@ -30,29 +29,21 @@ public class User {
     @Column(unique = true)
     @Email
     @NotBlank(message="{email.not.blank.and.unique}")
-    @UniqueEmail // custom validator
     private String email;
 
     @Column(nullable = false, unique = true, length = 50)
     @Size(min = 3, max = 50)
     @NotBlank(message="{username.not.blank.and.unique}")
-    @UniqueUsername // custom validator
     private String username;
 
-    //  1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and at least 8 characters long
-//    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
     @NotBlank(message="{password.blank}")
     private String password;
-    @Transient
-    private String passwordConfirmation;
 
     private int enabled;
 
     @ManyToOne
     private Role role;
-
     private String apiKey;
-
     private String accountKeyValidation;
     private LocalDateTime accountKeCreated;
     private LocalDateTime accountKeyExpirationDate;

@@ -16,15 +16,21 @@
 
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="userPasswords">
 
-                <b>password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
-                <input type="password" name="password" path="password"/><br>
-                <form:errors path="password"/><br>
+<%--                <b>password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>--%>
+<%--                <input type="password" name="password" path="password"/><br>--%>
+<%--                <form:errors path="password"/><br>--%>
 
+<%--                <b>confirm password</b><br>--%>
+<%--                <form: type="password" name="passwordConfirmation"/><br>--%>
+<%--                <c:if test="${not empty passwordMismatch}">--%>
+<%--                        <spring:message code="passwords.dont.match"/>--%>
+<%--                </c:if>--%>
+<%--                <form:errors path="password"/><br>--%>
+
+                <b>password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
+                <form:password name="password" path="password"/><br>
                 <b>confirm password</b><br>
-                <input type="password" name="passwordConfirmation"/><br>
-                <c:if test="${not empty passwordMismatch}">
-                        <spring:message code="passwords.dont.match"/>
-                </c:if>
+                <form:password name="passwordConfirmation" path="passwordConfirmation"/><br>
                 <form:errors path="password"/><br>
 
                 <input type="submit">

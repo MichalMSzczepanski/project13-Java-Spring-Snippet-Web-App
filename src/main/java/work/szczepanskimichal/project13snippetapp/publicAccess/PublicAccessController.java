@@ -5,24 +5,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
-import work.szczepanskimichal.project13snippetapp.utils.EmailService;
+import work.szczepanskimichal.project13snippetapp.utils.SimpleEmailService;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Random;
 
 @Controller
 @RequiredArgsConstructor
 public class PublicAccessController {
 
     private final UserService userService;
-    private final EmailService emailService;
+    private final SimpleEmailService emailService;
 
     @RequestMapping("/")
     public String getPublicHomepage() {
@@ -40,28 +38,18 @@ public class PublicAccessController {
 
     @GetMapping("/create-account")
     public String createUserGet(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("createUserDTO", new CreateUserDTO());
         return "public/create-account";
     }
 
     @PostMapping("/create-account")
-    public String createUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) throws NoSuchAlgorithmException {
+    public String createUserPost(@Valid CreateUserDTO createUserDTO, BindingResult result) throws NoSuchAlgorithmException {
         if (result.hasErrors()) {
             return "public/create-account";
         }
-        user.setEnabled(0);
-        // TODO create api key generator class with methods
-        Random rand = new Random();
-        int upperbound = 100000;
-        int apiKey = rand.nextInt(upperbound);
-        user.setApiKey(String.valueOf(apiKey));
-        // TODO create validation key generator class with methods
-        int accountKeyValidation = rand.nextInt(upperbound);
-        user.setAccountKeyValidation(String.valueOf(accountKeyValidation));
-        user.setAccountKeCreated(LocalDateTime.now());
-        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
-        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
+        User user = userService.convertCreateUserDTOToUser(createUserDTO);
         userService.saveUser(user);
+        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
         return "public/confirm-user-email";
     }
 

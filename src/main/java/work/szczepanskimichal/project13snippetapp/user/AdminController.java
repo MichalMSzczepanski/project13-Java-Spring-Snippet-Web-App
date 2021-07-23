@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import work.szczepanskimichal.project13snippetapp.role.Role;
 import work.szczepanskimichal.project13snippetapp.role.RoleService;
+import work.szczepanskimichal.project13snippetapp.utils.SimpleKeyGenerator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,16 +24,19 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final SimpleKeyGenerator simpleKeyGenerator;
 
     @GetMapping("/create-account")
-    public String adminCreateUserGet(Model model) {
+    public String adminCreateUserOrAdminGet(Model model) {
         model.addAttribute("user", new User());
-        return "admin/manage-user-accounts";
+        return "admin/create-account";
     }
 
     @PostMapping("/create-account")
-    public String adminCreateUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (validateCreateAndUpdateErrors(user, result, req, model)) return "admin/manage-user-accounts";
+    public String adminCreateUserOrAdminPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
+        if (result.hasErrors()) {
+            return "admin/create-account";
+        }
         userService.saveUser(user);
         return "redirect:/admin/dashboard";
         // TODO success page?
@@ -77,19 +81,6 @@ public class AdminController {
         return roleService.findAllRoles().stream()
                 .map(r -> r.getName())
                 .collect(Collectors.toList());
-    }
-
-//    error validation in create and update actions
-    private boolean validateCreateAndUpdateErrors(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-        if (result.hasErrors()) {
-            return true;
-        }
-        if(!(req.getParameter("password").equals(req.getParameter("passwordConfirmation"))) || req.getParameter("password") == "" || req.getParameter("passwordConfirmation") == "" ) {
-            model.addAttribute("passwordMismatch", true);
-            return true;
-        }
-        user.setPassword(req.getParameter("password"));
-        return false;
     }
 
 

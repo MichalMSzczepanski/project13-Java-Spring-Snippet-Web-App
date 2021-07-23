@@ -2,19 +2,16 @@ package work.szczepanskimichal.project13snippetapp.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
-import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
-import java.util.Random;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +25,6 @@ public class UserController {
         UserDetailsUpdateDTO userDetailsUpdateDTO = new UserDetailsUpdateDTO();
         userDetailsUpdateDTO = userDetailsUpdateDTO.userDTOFilledOut(currentUser);
         model.addAttribute("userDetails", userDetailsUpdateDTO);
-        System.out.println(userDetailsUpdateDTO);
         return "user/update-user-details";
     }
 
@@ -40,6 +36,8 @@ public class UserController {
         User updatedUser = currentUser.getUser();
         updatedUser.setUsername(userDetailsUpdateDTO.getUsername());
         updatedUser.setEmail(userDetailsUpdateDTO.getEmail());
+        System.out.println("FLAG 1111");
+        System.out.println(updatedUser);
         userService.update(updatedUser);
         return "redirect:/user/dashboard";
     }
@@ -63,7 +61,15 @@ public class UserController {
             return "user/update-user-password";
         }
         userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
-        return "redirect:/user/dashboard";
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        return "redirect:/";
+    }
+
+    @GetMapping("/delete")
+    public String deleteUser(@AuthenticationPrincipal CurrentUser currentUser) {
+        userService.delete(currentUser.getUser());
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        return "redirect:/";
     }
 
 //    TODO details in user dashboard

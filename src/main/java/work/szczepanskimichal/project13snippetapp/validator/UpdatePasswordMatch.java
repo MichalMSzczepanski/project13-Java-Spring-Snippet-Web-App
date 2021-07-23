@@ -7,11 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueUsernameValidator.class)
-@Target({ElementType.METHOD, ElementType.FIELD, ElementType.TYPE})
+@Constraint(validatedBy = UpdatePasswordMatchValidator.class)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueUsername {
-    String message() default "{uniqueUsername.error.message}";
+public @interface UpdatePasswordMatch {
+    String message() default "{passwords.dont.match}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

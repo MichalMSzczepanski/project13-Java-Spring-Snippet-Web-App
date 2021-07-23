@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Utils {
+public class UtilLists {
 
     private static List<String> colors;
     private static List<String> languages;
 
-    public Utils() {
+    public UtilLists() {
         colors = new ArrayList<>();
         colors.add("primary");
         colors.add("secondary");
