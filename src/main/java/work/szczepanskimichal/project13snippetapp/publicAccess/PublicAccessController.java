@@ -60,13 +60,14 @@ public class PublicAccessController {
         user.setAccountKeyValidation(String.valueOf(accountKeyValidation));
         user.setAccountKeCreated(LocalDateTime.now());
         user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
-        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "Confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
+        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
         userService.saveUser(user);
         return "public/confirm-user-email";
     }
 
     @GetMapping("/create-account/confirmation/{key}")
     public String confirmAccount(@PathVariable String key) {
+        // TODO check if validation key is expired
         if(userService.validateAccountKey(key)) {
             User user = userService.findByKey(key);
             user.setEnabled(1);
@@ -76,6 +77,12 @@ public class PublicAccessController {
             userService.update(user);
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/403")
+    public String notAllowed403() {
+        System.out.println("flag1");
+        return "public/403";
     }
 
 }

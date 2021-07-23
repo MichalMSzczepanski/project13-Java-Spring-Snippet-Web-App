@@ -11,9 +11,6 @@ import javax.validation.ConstraintValidatorContext;
 
 public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, User> {
 
-//    @Autowired
-//    private UserService userService;
-
     @Override
     public void initialize(PasswordMatch constraintAnnotation) {
     }
