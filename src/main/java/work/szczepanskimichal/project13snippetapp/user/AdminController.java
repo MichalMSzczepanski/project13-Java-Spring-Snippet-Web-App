@@ -104,14 +104,13 @@ public class AdminController {
     @PostMapping("/edit-user/{id}")
     public String editUserAccountPost(@Valid CreateUserDTO createUserDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println("flag1 - errors");
             System.out.println(userService.convertCreateUserDTOToUser(createUserDTO));
             System.out.println(createUserDTO.getPasswordConfirmation());
             return "admin/edit-user";
         }
         userService.update(userService.convertCreateUserDTOToUser(createUserDTO));
 // getting an error here, double url
-        return "redirect:admin/user-details/" + createUserDTO.getId();
+        return "redirect:/admin/user-details/" + createUserDTO.getId();
     }
 
     @GetMapping("/user-details/{id}")
