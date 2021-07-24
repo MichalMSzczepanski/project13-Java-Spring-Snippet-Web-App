@@ -1,6 +1,7 @@
 package work.szczepanskimichal.project13snippetapp.publicAccess;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +35,13 @@ public class PublicAccessController {
             request.setAttribute("loginError", true);
         }
         return "public/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+//        doesn't redirect to homepage BUT login
+        return "redirect:/";
     }
 
     @GetMapping("/create-account")

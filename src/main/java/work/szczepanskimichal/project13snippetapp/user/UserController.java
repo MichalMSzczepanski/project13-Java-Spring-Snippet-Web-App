@@ -62,6 +62,7 @@ public class UserController {
         }
         userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        //        doesn't redirect to homepage
         return "redirect:/";
     }
 
@@ -69,6 +70,7 @@ public class UserController {
     public String deleteUser(@AuthenticationPrincipal CurrentUser currentUser) {
         userService.delete(currentUser.getUser());
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        //        doesn't redirect to homepage
         return "redirect:/";
     }
 

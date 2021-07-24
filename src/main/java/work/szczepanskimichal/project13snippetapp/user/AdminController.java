@@ -67,6 +67,8 @@ public class AdminController {
 //        return "/user/dashboard";
 //    }
 
+//    /admin/user-accounts !!!
+
     //    TODO details in user dashboard
     @GetMapping("/dashboard")
     public String adminDashboard(Model model) {
