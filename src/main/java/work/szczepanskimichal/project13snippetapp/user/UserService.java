@@ -32,6 +32,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void adminSaveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
     public void delete(User user) {
         userRepository.delete(user);
     }
@@ -77,7 +82,20 @@ public class UserService {
         user.setAccountKeyValidation(keyGenerator.generateAccountKey());
         user.setAccountKeCreated(LocalDateTime.now());
         user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
-        System.out.println("flag convert user dto to user: " + user);
+        return user;
+    }
+
+    public User adminConvertCreateUserDTOToUser (CreateUserDTO createUserDTO) {
+        User user = new User();
+        user.setEmail(createUserDTO.getEmail());
+        user.setUsername(createUserDTO.getUsername());
+        user.setPassword(createUserDTO.getPassword());
+        user.setEnabled(1);
+        user.setRole(createUserDTO.getRole());
+        user.setApiKey(createUserDTO.getApiKey());
+        user.setAccountKeyValidation(null);
+        user.setAccountKeCreated(null);
+        user.setAccountKeyExpirationDate(null);
         return user;
     }
 

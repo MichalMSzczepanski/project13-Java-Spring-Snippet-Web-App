@@ -36,8 +36,6 @@ public class UserController {
         User updatedUser = currentUser.getUser();
         updatedUser.setUsername(userDetailsUpdateDTO.getUsername());
         updatedUser.setEmail(userDetailsUpdateDTO.getEmail());
-        System.out.println("FLAG 1111");
-        System.out.println(updatedUser);
         userService.update(updatedUser);
         return "redirect:/user/dashboard";
     }

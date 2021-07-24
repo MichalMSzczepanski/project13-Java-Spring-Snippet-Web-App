@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import work.szczepanskimichal.project13snippetapp.role.Role;
 import work.szczepanskimichal.project13snippetapp.role.RoleService;
+import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.utils.SimpleKeyGenerator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,16 +29,19 @@ public class AdminController {
 
     @GetMapping("/create-account")
     public String adminCreateUserOrAdminGet(Model model) {
-        model.addAttribute("user", new User());
+        CreateUserDTO createUserDTO = new CreateUserDTO();
+        createUserDTO.setApiKey(simpleKeyGenerator.generateApiKey());
+        model.addAttribute("createUserDTO", createUserDTO);
         return "admin/create-account";
     }
 
     @PostMapping("/create-account")
-    public String adminCreateUserOrAdminPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
+    public String adminCreateUserOrAdminPost(@Valid CreateUserDTO createUserDTO, BindingResult result) {
         if (result.hasErrors()) {
             return "admin/create-account";
         }
-        userService.saveUser(user);
+        User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+        userService.adminSaveUser(user);
         return "redirect:/admin/dashboard";
         // TODO success page?
     }
@@ -79,11 +83,15 @@ public class AdminController {
     }
 
     @ModelAttribute("roleList")
-    private List<String> getAllRoles() {
+    public List<String> getAllRoles() {
         return roleService.findAllRoles().stream()
                 .map(r -> r.getName())
                 .collect(Collectors.toList());
     }
 
+    @ModelAttribute("enabledOptions")
+    public String[] getEnabledOptions() {
+        return new String[]{"0", "1"};
+    }
 
 }
