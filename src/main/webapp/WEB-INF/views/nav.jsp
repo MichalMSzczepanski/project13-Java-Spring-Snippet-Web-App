@@ -65,13 +65,13 @@
                         <a class="nav-link" href="#"> | </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/update-user-details"><span class="text-primary">Update Account Details</span></a>
+                        <a class="nav-link" href="/user/update-user-details"><span class="text-primary">Update Account Details</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="#"> | </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/update-user-password"><span class="text-primary">Update Password</span></a>
+                        <a class="nav-link" href="/user/update-user-password"><span class="text-primary">Update Password</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="#"> | </a>

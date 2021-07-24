@@ -9,11 +9,11 @@
     <%@include file="../bootstrap.jsp" %>
 </head>
 <body>
+<%@include file="../nav.jsp" %>
 <div class="container">
     <div style="height: 800px;">
         <div class="h-100 p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
-            Update you password
-
+            <h2>Update you password</h2>
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="userPasswords">
 
 <%--                <b>password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>--%>
@@ -27,9 +27,9 @@
 <%--                </c:if>--%>
 <%--                <form:errors path="password"/><br>--%>
 
-                <b>password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
+                <b>Password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
                 <form:password name="password" path="password"/><br>
-                <b>confirm password</b><br>
+                <b>Confirm password</b><br>
                 <form:password name="passwordConfirmation" path="passwordConfirmation"/><br>
                 <form:errors path="password"/><br>
 
@@ -44,5 +44,6 @@
         </div>
     </div>
 </div>
+<%@include file="../footer.jsp" %>
 </body>
 </html>

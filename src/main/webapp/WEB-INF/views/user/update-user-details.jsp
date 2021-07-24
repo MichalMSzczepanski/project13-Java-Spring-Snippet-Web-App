@@ -9,18 +9,18 @@
     <%@include file="../bootstrap.jsp" %>
 </head>
 <body>
+<%@include file="../nav.jsp" %>
 <div class="container">
     <div style="height: 800px;">
         <div class="h-100 p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
-            Update you account details
-
+            <h2>Update you account details</h2>
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="userDetails">
 
-                Username <span title="<spring:message code="username.not.blank.and.unique"/>">&#9432;</span><br>
+                <b>Username</b> <span title="<spring:message code="username.not.blank.and.unique"/>">&#9432;</span><br>
                 <form:input type="text" path="username"/><br>
                 <form:errors path="username"/><br>
 
-                Email <span title="<spring:message code="email.not.blank.and.unique"/>">&#9432;</span><br>
+                <b>Email</b> <span title="<spring:message code="email.not.blank.and.unique"/>">&#9432;</span><br>
                 <form:input type="email" path="email"/><br>
                 <form:errors path="email"/><br>
 
@@ -32,5 +32,6 @@
         </div>
     </div>
 </div>
+<%@include file="../footer.jsp" %>
 </body>
 </html>

@@ -77,10 +77,10 @@ public class UserController {
 //    TODO details in user dashboard
     @GetMapping("/dashboard")
     public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        model.addAttribute("currentUserName", currentUser.getUser().getUsername());
+        model.addAttribute("currentUser", currentUser.getUser());
 
         // send user snippet categories
-        // send user sippets
+        // send user snippets
 
         return "/user/dashboard";
     }
