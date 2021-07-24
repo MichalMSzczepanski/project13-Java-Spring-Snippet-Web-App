@@ -36,13 +36,19 @@
                     <a class="nav-link" href="#"> | </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/user-accounts"><span class="text-danger">User Accounts</span></a>
+                    <a class="nav-link" href="/admin/manage-user-accounts"><span class="text-danger">Manage User Accounts</span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#"> | </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/update-account"><span class="text-danger">Update Account</span></a>
+                    <a class="nav-link" href="/admin/update-admin-details"><span class="text-danger">Update Account</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#"> | </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/update-admin-password"><span class="text-danger">Update Password</span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#"> | </a>

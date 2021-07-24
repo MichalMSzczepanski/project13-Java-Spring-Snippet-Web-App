@@ -2,20 +2,15 @@ package work.szczepanskimichal.project13snippetapp.user;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.ls.LSOutput;
-import work.szczepanskimichal.project13snippetapp.role.Role;
 import work.szczepanskimichal.project13snippetapp.role.RoleRepository;
+import work.szczepanskimichal.project13snippetapp.user.DTO.AdminUpdateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.utils.KeyGenerator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +32,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
-
     public User findByUserId(Long id) { return userRepository.findById(id).orElse(null); }
 
     public User findByUserName(String username) {
@@ -51,16 +42,10 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User findByKey(String key) { return userRepository.findByAccountKeyValidation(key); }
+    public User findByKey(String key) { return userRepository.findByAccountKey(key); }
 
-    public Boolean validateAccountKey(String key) {
-        if (userRepository.findByAccountKeyValidation(key) != null) {
-            LocalDateTime expirationDate = userRepository.findByAccountKeyValidation(key).getAccountKeyExpirationDate();
-            if(LocalDateTime.now().compareTo(expirationDate) < 1) {
-                return true;
-            }
-        }
-        return false;
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public void update(User user) {
@@ -72,15 +57,46 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+    public Boolean validateAccountKey(String key) {
+        if (userRepository.findByAccountKey(key) != null) {
+            LocalDateTime expirationDate = userRepository.findByAccountKey(key).getAccountKeyExpirationDate();
+            if(LocalDateTime.now().compareTo(expirationDate) < 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public User convertCreateUserDTOToUser (CreateUserDTO createUserDTO) {
         User user = new User();
+        user.setId(createUserDTO.getId()); // added
         user.setEmail(createUserDTO.getEmail());
         user.setUsername(createUserDTO.getUsername());
         user.setPassword(createUserDTO.getPassword());
         user.setEnabled(0);
+        user.setRole(createUserDTO.getRole()); // added
         user.setApiKey(keyGenerator.generateApiKey());
-        user.setAccountKeyValidation(keyGenerator.generateAccountKey());
-        user.setAccountKeCreated(LocalDateTime.now());
+        user.setAccountKey(keyGenerator.generateAccountKey());
+        user.setAccountKeyCreated(LocalDateTime.now());
+        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
+        return user;
+    }
+
+    public User convertAdminUpdateUserDTOToUser (AdminUpdateUserDTO adminUpdateUserDTO) {
+        User user = new User();
+        user.setId(adminUpdateUserDTO.getId()); // added
+        user.setEmail(adminUpdateUserDTO.getEmail());
+        user.setUsername(adminUpdateUserDTO.getUsername());
+        user.setPassword(adminUpdateUserDTO.getPassword());
+        user.setEnabled(0);
+        user.setRole(adminUpdateUserDTO.getRole()); // added
+        user.setApiKey(keyGenerator.generateApiKey());
+        user.setAccountKey(keyGenerator.generateAccountKey());
+        user.setAccountKeyCreated(LocalDateTime.now());
         user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
         return user;
     }
@@ -93,10 +109,25 @@ public class UserService {
         user.setEnabled(1);
         user.setRole(createUserDTO.getRole());
         user.setApiKey(createUserDTO.getApiKey());
-        user.setAccountKeyValidation(null);
-        user.setAccountKeCreated(null);
+        user.setAccountKey(null);
+//        user.setAccountKeCreated(null);
         user.setAccountKeyExpirationDate(null);
         return user;
+    }
+
+    public CreateUserDTO adminConvertUserToCreateUserDTO (User user) {
+        CreateUserDTO createUserDTO = new CreateUserDTO();
+        createUserDTO.setId(user.getId());
+        createUserDTO.setEmail(user.getEmail());
+        createUserDTO.setUsername(user.getUsername());
+        createUserDTO.setPassword(user.getPassword());
+        createUserDTO.setEnabled(user.getEnabled());
+        createUserDTO.setRole(user.getRole());
+        createUserDTO.setApiKey(user.getApiKey());
+        createUserDTO.setAccountKey(user.getAccountKey());
+        createUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
+        createUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
+        return createUserDTO;
     }
 
 }

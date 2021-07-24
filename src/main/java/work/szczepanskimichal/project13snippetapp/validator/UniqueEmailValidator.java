@@ -32,12 +32,8 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Us
     public boolean isValid(UserDetailsUpdateDTO userDetailsUpdateDTO, ConstraintValidatorContext constraintValidatorContext) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("FLAGGG :::" + auth.getName());
         User currentUser = userService.findByUserId(((CurrentUser) auth.getPrincipal()).getUser().getId());
-        System.out.println("FLAGG2 >>>" + currentUser);
-        if (userService.findByUserEmail(userDetailsUpdateDTO.getEmail()) == null) {
-            return true;
-        } else if(userDetailsUpdateDTO.getEmail().equals(currentUser.getEmail())){
+        if (userService.findByUserEmail(userDetailsUpdateDTO.getEmail()) == null || userDetailsUpdateDTO.getEmail().equals(currentUser.getEmail())) {
             return true;
         } else {
             constraintValidatorContext.buildConstraintViolationWithTemplate("{uniqueEmail.error.message}").addPropertyNode("email").addConstraintViolation();

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
-import work.szczepanskimichal.project13snippetapp.utils.SimpleEmailService;
+import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class PublicAccessController {
 
     private final UserService userService;
-    private final SimpleEmailService emailService;
+    private final EmailService emailService;
 
     @RequestMapping("/")
     public String getPublicHomepage() {
@@ -57,7 +57,7 @@ public class PublicAccessController {
         }
         User user = userService.convertCreateUserDTOToUser(createUserDTO);
         userService.saveUser(user);
-        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKeyValidation());
+        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKey());
         return "public/confirm-user-email";
     }
 
@@ -67,8 +67,8 @@ public class PublicAccessController {
         if(userService.validateAccountKey(key)) {
             User user = userService.findByKey(key);
             user.setEnabled(1);
-            user.setAccountKeyValidation(null);
-            user.setAccountKeCreated(null);
+            user.setAccountKey(null);
+//            user.setAccountKeCreated(null);
             user.setAccountKeyExpirationDate(null);
             userService.update(user);
         }
@@ -77,7 +77,6 @@ public class PublicAccessController {
 
     @GetMapping("/403")
     public String notAllowed403() {
-        System.out.println("flag1");
         return "public/403";
     }
 

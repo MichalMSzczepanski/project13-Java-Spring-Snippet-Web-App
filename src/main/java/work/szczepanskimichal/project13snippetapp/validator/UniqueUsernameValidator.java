@@ -27,9 +27,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = userService.findByUserId(((CurrentUser) auth.getPrincipal()).getUser().getId());
-        if (userService.findByUserName(userDetailsUpdateDTO.getUsername()) == null) {
-            return true;
-        } else if(userDetailsUpdateDTO.getUsername().equals(currentUser.getUsername())){
+        if (userService.findByUserName(userDetailsUpdateDTO.getUsername()) == null || userDetailsUpdateDTO.getUsername().equals(currentUser.getUsername())) {
             return true;
         } else {
             constraintValidatorContext.buildConstraintViolationWithTemplate("{uniqueUsername.error.message}").addPropertyNode("username").addConstraintViolation();

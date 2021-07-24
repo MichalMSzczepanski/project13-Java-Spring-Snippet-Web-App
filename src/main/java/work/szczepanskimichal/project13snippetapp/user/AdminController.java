@@ -1,20 +1,23 @@
 package work.szczepanskimichal.project13snippetapp.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.role.Role;
 import work.szczepanskimichal.project13snippetapp.role.RoleService;
+import work.szczepanskimichal.project13snippetapp.user.DTO.AdminUpdateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
 import work.szczepanskimichal.project13snippetapp.utils.SimpleKeyGenerator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,38 +49,90 @@ public class AdminController {
         // TODO success page?
     }
 
-//    @GetMapping("/update-account")
-//    public String updateAccountGet(Principal principal, Model model) {
-//        model.addAttribute("user", userService.findByUserEmail(principal.getName()));
-//        return "public/create-update-account";
-//    }
-//
-//    @PostMapping("/update-account")
-//    public String updateUserPost(@Valid User user, BindingResult result, HttpServletRequest req, Model model) {
-//        if (validateCreateAndUpdateErrors(user, result, req, model)) return "create-update-account";
-//        user.setEnabled(user.getEnabled());
-//        user.setApiKey(user.getApiKey());
-//        userService.saveUser(user);
-//        return "redirect:/dashboard";
-//    }
-//
-//    //    TODO details in user dashboard
-//    @GetMapping("/dashboard")
-//    public String userDashboard(Model model) {
-//
-//        // send user snippet categories
-//        // send user sippets
-//
-//        return "/user/dashboard";
-//    }
+    @GetMapping("/update-admin-details")
+    public String updateAccountGet(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
+        UserDetailsUpdateDTO userDetailsUpdateDTO = new UserDetailsUpdateDTO();
+        userDetailsUpdateDTO = userDetailsUpdateDTO.userDTOFilledOut(currentUser);
+        model.addAttribute("userDetails", userDetailsUpdateDTO);
+        return "admin/update-admin-details";
+    }
 
-//    /admin/user-accounts !!!
+    @PostMapping("/update-admin-details")
+    public String updateUserPost(@ModelAttribute("userDetails") @Valid UserDetailsUpdateDTO userDetailsUpdateDTO, BindingResult result, @AuthenticationPrincipal CurrentUser currentUser) {
+        if (result.hasErrors()) {
+            return "admin/update-admin-details";
+        }
+        User updatedUser = currentUser.getUser();
+        updatedUser.setUsername(userDetailsUpdateDTO.getUsername());
+        updatedUser.setEmail(userDetailsUpdateDTO.getEmail());
+        userService.update(updatedUser);
+        return "redirect:/admin/dashboard";
+    }
 
-    //    TODO details in user dashboard
+    @GetMapping("/update-admin-password")
+    public String updateUserPasswordGet(Model model) {
+        model.addAttribute("userPasswords", new UserPasswordUpdateDTO());
+        return "admin/update-admin-password";
+        //    TODO send email with link to change password?
+    }
+
+    @PostMapping("/update-admin-password")
+    public String updateUserPasswordPost(@ModelAttribute("userPasswords") @Valid UserPasswordUpdateDTO userPasswordUpdateDTO, BindingResult result, HttpServletRequest request, @AuthenticationPrincipal CurrentUser currentUser) {
+        if (result.hasErrors()) {
+            return "admin/update-admin-password";
+        }
+        userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
+        SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        //        doesn't redirect to homepage
+        return "redirect:/";
+    }
+
+    @GetMapping("/manage-user-accounts")
+    public String manageUserAccountsGet(Model model) {
+        model.addAttribute("userList", userService.getAllUsers());
+        return "admin/manage-user-accounts";
+    }
+
+    @GetMapping("/edit-user/{id}")
+    public String editUserAccountGet(@PathVariable Long id, Model model) {
+        CreateUserDTO createUserDTO = userService.adminConvertUserToCreateUserDTO(userService.findByUserId(id));
+        createUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
+        model.addAttribute("createUserDTO", createUserDTO);
+        return "admin/edit-user";
+    }
+
+    @PostMapping("/edit-user/{id}")
+    public String editUserAccountPost(@Valid CreateUserDTO createUserDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println("flag1 - errors");
+            System.out.println(userService.convertCreateUserDTOToUser(createUserDTO));
+            System.out.println(createUserDTO.getPasswordConfirmation());
+            return "admin/edit-user";
+        }
+        userService.update(userService.convertCreateUserDTOToUser(createUserDTO));
+// getting an error here, double url
+        return "redirect:admin/user-details/" + createUserDTO.getId();
+    }
+
+    @GetMapping("/user-details/{id}")
+    public String getUserDetails(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findByUserId(id));
+        return "admin/user-details";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String adminDeleteUser(@PathVariable Long id) {
+        userService.delete(userService.findByUserId(id));
+        return "redirect:/admin/manage-user-accounts";
+    }
+
+    //    TODO details in admin dashboard
     @GetMapping("/dashboard")
-    public String adminDashboard(Model model) {
+    public String adminDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("currentUser", currentUser.getUser());
 
-        // tudotudo tudododo
+        // preview logs?
+        //
 
         return "/admin/dashboard";
     }

@@ -52,12 +52,6 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/update-user-password";
         }
-        if(!(request.getParameter("password").equals(request.getParameter("passwordConfirmation")))
-                || request.getParameter("password") == ""
-                || request.getParameter("passwordConfirmation") == "") {
-            model.addAttribute("passwordMismatch", true);
-            return "user/update-user-password";
-        }
         userService.updatePassword(currentUser.getUser(), request.getParameter("password"));
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         //        doesn't redirect to homepage
@@ -72,7 +66,7 @@ public class UserController {
         return "redirect:/";
     }
 
-//    TODO details in user dashboard
+    //    TODO details in user dashboard
     @GetMapping("/dashboard")
     public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
         model.addAttribute("currentUser", currentUser.getUser());

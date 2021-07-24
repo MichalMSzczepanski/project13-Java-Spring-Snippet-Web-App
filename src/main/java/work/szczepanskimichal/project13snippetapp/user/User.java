@@ -44,13 +44,8 @@ public class User {
     @ManyToOne
     private Role role;
     private String apiKey;
-    private String accountKeyValidation;
-    private LocalDateTime accountKeCreated;
+    private String accountKey;
+    private LocalDateTime accountKeyCreated;
     private LocalDateTime accountKeyExpirationDate;
 
-
-//    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-//        this.username = username;
-//        this.password = password;
-//    }
 }
