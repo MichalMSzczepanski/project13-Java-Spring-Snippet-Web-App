@@ -18,6 +18,7 @@
           <p>Username: ${user.username}</p>
           <p>Email: ${user.email}</p>
           <p>Role: ${user.role.name}</p>
+          <p>Role: ${user.enabled}</p>
           <p>Api Key: ${user.apiKey}</p>
           <p>Account Key Validation: ${user.accountKey}</p>
           <p>Account Created: ${user.accountKeyCreated}</p>

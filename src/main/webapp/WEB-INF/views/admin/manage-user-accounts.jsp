@@ -33,7 +33,7 @@
                 <c:forEach items="${userList}" var="user">
                     <tr>
                         <th scope="row">${user.id}</th>
-                        <td>${user.username}</td>
+                        <td><a href="/admin/user-details/${user.id}">${user.username}</a></td>
                         <td>${user.email}</td>
                         <td>${user.enabled}</td>
                         <td>${user.role.name}</td>

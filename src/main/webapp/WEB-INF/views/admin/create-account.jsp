@@ -4,12 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        <sec:authorize access="!isAuthenticated()">
-            Create Account
-        </sec:authorize>
-        <sec:authorize access="hasRole('USER')">
-            This seems... fishy ><^>
-        </sec:authorize>
+        Create user or admin account
     </title>
     <%@include file="../bootstrap.jsp" %>
 </head>
@@ -50,7 +45,17 @@
                 </form:select><br><br>
 
                 <b>Api Key</b><br>
-                <p>Generated api key: ${createUserDTO.apiKey}</p>
+                <p>Generated api key: ${createUserDTO.apiKey}</p><br>
+
+                <b>Send email with custom link for account verification?</b>
+                <div class="form-check">
+
+                    <input class="form-check-input" type="radio" name="emailConfirmationFollowUp" value="yes"checked>
+                    <label>yes</label><br>
+
+                    <input class="form-check-input" type="radio" name="emailConfirmationFollowUp" value="no">
+                    <label>no</label><br>
+                </div>
 
                 <input type="submit">
             </form:form>

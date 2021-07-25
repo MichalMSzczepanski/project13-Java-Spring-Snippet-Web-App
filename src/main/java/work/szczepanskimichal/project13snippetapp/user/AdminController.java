@@ -1,5 +1,4 @@
 package work.szczepanskimichal.project13snippetapp.user;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,17 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import work.szczepanskimichal.project13snippetapp.role.Role;
 import work.szczepanskimichal.project13snippetapp.role.RoleService;
 import work.szczepanskimichal.project13snippetapp.user.DTO.AdminUpdateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
+import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 import work.szczepanskimichal.project13snippetapp.utils.SimpleKeyGenerator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +27,18 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
     private final SimpleKeyGenerator simpleKeyGenerator;
+    private final EmailService emailService;
+
+    //    TODO details in admin dashboard
+    @GetMapping("/dashboard")
+    public String adminDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        model.addAttribute("currentUser", currentUser.getUser());
+
+        // preview logs?
+        //
+
+        return "/admin/dashboard";
+    }
 
     @GetMapping("/create-account")
     public String adminCreateUserOrAdminGet(Model model) {
@@ -39,13 +49,22 @@ public class AdminController {
     }
 
     @PostMapping("/create-account")
-    public String adminCreateUserOrAdminPost(@Valid CreateUserDTO createUserDTO, BindingResult result) {
+    public String adminCreateUserOrAdminPost(@Valid CreateUserDTO createUserDTO, BindingResult result, @RequestParam String emailConfirmationFollowUp) {
         if (result.hasErrors()) {
             return "admin/create-account";
         }
         User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+        user.setEnabled(createUserDTO.getEnabled());
+        user.setRole(createUserDTO.getRole());
+        if(emailConfirmationFollowUp.equals("yes")) {
+            String key = simpleKeyGenerator.generateAccountKey();
+            user.setAccountKey(key);
+            user.setAccountKeyCreated(LocalDateTime.now());
+            user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
+            emailService.sendEmail(createUserDTO.getEmail(), "confirm your email", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + key);
+        }
         userService.adminSaveUser(user);
-        return "redirect:/admin/dashboard";
+        return "redirect:/admin/user-details/" + user.getId();
         // TODO success page?
     }
 
@@ -123,17 +142,6 @@ public class AdminController {
     public String adminDeleteUser(@PathVariable Long id) {
         userService.delete(userService.findByUserId(id));
         return "redirect:/admin/manage-user-accounts";
-    }
-
-    //    TODO details in admin dashboard
-    @GetMapping("/dashboard")
-    public String adminDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        model.addAttribute("currentUser", currentUser.getUser());
-
-        // preview logs?
-        //
-
-        return "/admin/dashboard";
     }
 
     @ModelAttribute("roleList")

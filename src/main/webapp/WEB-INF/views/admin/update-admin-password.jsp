@@ -16,7 +16,9 @@
             <h2>Update your password</h2>
             <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="userPasswords">
 
-                <b>Password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
+                <b>Old password</b><br>
+                <form:password name="password" path="oldPassword"/><br><br>
+                <b>New password</b> <span title="<spring:message code="password.pattern"/>">&#9432;</span><br>
                 <form:password name="password" path="password"/><br>
                 <b>Confirm password</b><br>
                 <form:password name="passwordConfirmation" path="passwordConfirmation"/><br>
