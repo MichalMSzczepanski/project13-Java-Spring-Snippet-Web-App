@@ -15,6 +15,9 @@ import javax.validation.constraints.Size;
 @UpdatePasswordMatch
 public class UserPasswordUpdateDTO {
 
+    @NotBlank(message="{password.blank}")
+    private String oldPassword;
+
     //  1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and at least 8 characters long
 //    @Pattern(regexp = "(?=(.*[0-9]))(?=.*[\\!@#$%^&*()\\\\[\\]{}\\-_+=~`|:;\"'<>,.\\/?])(?=.*\\[a-z])(?=(.*[A-Z]))(?=(.*)).{8,}", message="{password.pattern}")
     @NotBlank(message="{password.blank}")
