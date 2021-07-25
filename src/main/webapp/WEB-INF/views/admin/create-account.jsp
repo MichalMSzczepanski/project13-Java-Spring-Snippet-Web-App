@@ -11,8 +11,8 @@
 <body>
 <%@include file="../nav.jsp" %>
 <div class="container">
-    <div style="height: 800px;">
-        <div class="h-100 p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
+    <div>
+        <div class=" p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
 
             <h2>Create a user or admin account</h2>
 
@@ -54,7 +54,7 @@
                     <label>yes</label><br>
 
                     <input class="form-check-input" type="radio" name="emailConfirmationFollowUp" value="no">
-                    <label>no</label><br>
+                    <label>no</label><br><br>
                 </div>
 
                 <input type="submit">
