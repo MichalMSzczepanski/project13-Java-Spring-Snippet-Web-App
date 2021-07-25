@@ -7,9 +7,8 @@ import work.szczepanskimichal.project13snippetapp.validator.*;
 
 @Data
 @NoArgsConstructor
-@PasswordMatch
-// validator maila
-// validator username'a
+@AdminUniqueEmail
+@AdminUniqueUsername
 public class AdminUpdateUserDTO extends User {
 
     private String passwordConfirmation;

@@ -130,4 +130,19 @@ public class UserService {
         return createUserDTO;
     }
 
+    public AdminUpdateUserDTO adminConvertUserToAdminUpdateUserDTO (User user) {
+        AdminUpdateUserDTO adminUpdateUserDTO = new AdminUpdateUserDTO();
+        adminUpdateUserDTO.setId(user.getId());
+        adminUpdateUserDTO.setEmail(user.getEmail());
+        adminUpdateUserDTO.setUsername(user.getUsername());
+        adminUpdateUserDTO.setPassword(user.getPassword());
+        adminUpdateUserDTO.setEnabled(user.getEnabled());
+        adminUpdateUserDTO.setRole(user.getRole());
+        adminUpdateUserDTO.setApiKey(user.getApiKey());
+        adminUpdateUserDTO.setAccountKey(user.getAccountKey());
+        adminUpdateUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
+        adminUpdateUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
+        return adminUpdateUserDTO;
+    }
+
 }

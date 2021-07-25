@@ -95,22 +95,22 @@ public class AdminController {
 
     @GetMapping("/edit-user/{id}")
     public String editUserAccountGet(@PathVariable Long id, Model model) {
-        CreateUserDTO createUserDTO = userService.adminConvertUserToCreateUserDTO(userService.findByUserId(id));
-        createUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
-        model.addAttribute("createUserDTO", createUserDTO);
+        AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
+        adminUpdateUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
+        model.addAttribute("adminUpdateUserDTO", adminUpdateUserDTO);
         return "admin/edit-user";
     }
 
+// TODO walidator do DTO dla maila u username'a ponizej
     @PostMapping("/edit-user/{id}")
-    public String editUserAccountPost(@Valid CreateUserDTO createUserDTO, BindingResult result) {
+    public String editUserAccountPost(@Valid AdminUpdateUserDTO adminUpdateUserDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println(userService.convertCreateUserDTOToUser(createUserDTO));
-            System.out.println(createUserDTO.getPasswordConfirmation());
+            System.out.println(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
+            System.out.println(adminUpdateUserDTO.getPasswordConfirmation());
             return "admin/edit-user";
         }
-        userService.update(userService.convertCreateUserDTOToUser(createUserDTO));
-// getting an error here, double url
-        return "redirect:/admin/user-details/" + createUserDTO.getId();
+        userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
+        return "redirect:/admin/user-details/" + adminUpdateUserDTO.getId();
     }
 
     @GetMapping("/user-details/{id}")

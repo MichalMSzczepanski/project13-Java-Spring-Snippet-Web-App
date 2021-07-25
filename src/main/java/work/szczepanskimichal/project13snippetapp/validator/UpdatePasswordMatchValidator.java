@@ -6,10 +6,10 @@ import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UpdatePasswordMatchValidator implements ConstraintValidator<UpdatePasswordMatch, UserPasswordUpdateDTO> {
+public class UpdatePasswordMatchValidator implements ConstraintValidator<PasswordMatch, UserPasswordUpdateDTO> {
 
     @Override
-    public void initialize(UpdatePasswordMatch constraintAnnotation) {
+    public void initialize(PasswordMatch constraintAnnotation) {
     }
 
     @Override

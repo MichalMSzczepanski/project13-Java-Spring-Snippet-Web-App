@@ -14,9 +14,9 @@
     <div style="height: 800px;">
         <div class="h-100 p-5 bg-light text-dark d-flex flex-column justify-content-center align-items-center">
 
-            <h2>Edit user ${createUserDTO.username}</h2>
+            <h2>Edit user ${adminUpdateUserDTO.username}</h2>
 
-            <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="createUserDTO">
+            <form:form class="p-3 w-75 border border-dark" method="post" modelAttribute="adminUpdateUserDTO">
                 <form:hidden path="id"/>
                 <form:hidden path="apiKey"/>
                 <form:hidden path="password"/>
@@ -25,7 +25,7 @@
                 <form:hidden path="accountKeyCreated"/>
                 <form:hidden path="accountKeyExpirationDate"/>
 
-                <b>User Id: ${createUserDTO.id}</b><br><br>
+                <b>User Id: ${adminUpdateUserDTO.id}</b><br><br>
 
                 <b>Username</b> <span title="<spring:message code="username.not.blank.and.unique"/>">&#9432;</span><br>
                 <form:input type="text" path="username"/><br>
@@ -45,7 +45,7 @@
                     <form:options items="${roleList}"></form:options>
                 </form:select><br><br>
 
-                <p><b>Api Key</b>: ${createUserDTO.apiKey}</p>
+                <p><b>Api Key</b>: ${adminUpdateUserDTO.apiKey}</p>
 
                 <input type="submit">
             </form:form>
