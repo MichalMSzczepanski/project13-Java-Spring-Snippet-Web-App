@@ -18,10 +18,10 @@
         <form:hidden path="id"/>
         <form:hidden path="createdOn"/>
         <form:hidden path="updatedOn"/>
-        <form:hidden path="tags"/>
 
         <b>Title</b><br>
         <form:input type="text" path="title"/><br>
+<%--        <form:errors path="*"/><br>--%>
         <form:errors path="title"/><br>
 
         <b>Favorite</b><br>

@@ -41,17 +41,14 @@ public class Snippet {
     @Size(min = 5, max = 50)
     private String title;
 
-    // user can save empty snippet
     @Column(columnDefinition = "TEXT")
     @NotBlank
     @Size(min=5, max=65535)
     private String snippetContent;
 
-    // user chooses checkbox
     @Column(columnDefinition = "BIT default 0")
     private Boolean favorite;
 
-    // automatically created/updated
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 

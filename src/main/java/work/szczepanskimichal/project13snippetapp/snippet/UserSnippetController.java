@@ -47,10 +47,10 @@ public class UserSnippetController {
 
     @PostMapping("/add-snippet")
     public String userAddSnippetPost(@AuthenticationPrincipal CurrentUser currentUser, @ModelAttribute("snippet") @Valid Snippet snippet, BindingResult result, HttpServletRequest request, Model model) {
-//        if(result.hasErrors()) {
-//            getProgrammingLanguagesAndUserFolders(currentUser, model);
-//            return "user/user-snippet-add";
-//        }
+        if(result.hasErrors()) {
+            getProgrammingLanguagesAndUserFolders(currentUser, model);
+            return "user/user-snippet-add";
+        }
         if(request.getParameter("inputedFolder") != null & request.getParameter("inputedFolder") != "") {
             snippet.setFolder(request.getParameter("inputedFolder"));
         }
