@@ -27,6 +27,7 @@
                 <input type="submit">
             </form:form>
 
+            <a class="btn btn-warning btn-lg" href="/user/delete" role="button">Delete your account</a><br>
             <a class="btn btn-warning btn-lg" href="/" role="button">Homepage</a><br>
 
         </div>

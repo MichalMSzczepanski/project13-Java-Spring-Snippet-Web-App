@@ -66,15 +66,4 @@ public class UserController {
         return "redirect:/";
     }
 
-    //    TODO details in user dashboard
-    @GetMapping("/dashboard")
-    public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        model.addAttribute("currentUser", currentUser.getUser());
-
-        // send user snippet categories
-        // send user snippets
-
-        return "/user/dashboard";
-    }
-
 }

@@ -22,7 +22,6 @@
                 <form:password name="password" path="password"/><br>
                 <b>Confirm password</b><br>
                 <form:password name="passwordConfirmation" path="passwordConfirmation"/><br><br>
-                <br>dziura<br>
                 <form:errors path="password"/><br>
 
                 <input type="submit">

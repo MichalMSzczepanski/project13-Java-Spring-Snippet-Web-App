@@ -37,12 +37,13 @@ public class Snippet {
     private String folder;
 
     @Column(columnDefinition = "varchar(255)")
-    @Size(min = 5, max = 50)
     @NotBlank
+    @Size(min = 5, max = 50)
     private String title;
 
     // user can save empty snippet
     @Column(columnDefinition = "TEXT")
+    @NotBlank
     @Size(min=5, max=65535)
     private String snippetContent;
 
@@ -60,6 +61,7 @@ public class Snippet {
     @ManyToOne
     private User owner;
 
+    @PrePersist
     public void prePersist() {
         createdOn = LocalDateTime.now();
     }

@@ -82,6 +82,12 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="#"> | </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/add-snippet"><span class="text-primary">Add Snippet</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#"> | </a>
+                    </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="/logout"><span class="text-primary"><b>Logout</b></span></a>
                             <%--                    <form action="<c:url value="/logout"/>" method="post">--%>
