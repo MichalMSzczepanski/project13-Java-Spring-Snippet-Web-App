@@ -143,7 +143,6 @@ public class AdminController {
     public String adminDeleteUser(@PathVariable Long id, Model model) {
         if (userService.isThisTheLastAdmin(userService.findByUserId(id))) {
             model.addAttribute("lastAdminConfirmed", true);
-//            delete comment
             return "public/error";
         }
         userService.delete(userService.findByUserId(id));
