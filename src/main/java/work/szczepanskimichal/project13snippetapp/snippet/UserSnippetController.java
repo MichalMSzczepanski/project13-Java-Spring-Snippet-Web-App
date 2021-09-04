@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
+import work.szczepanskimichal.project13snippetapp.utils.Languages;
 import work.szczepanskimichal.project13snippetapp.utils.UtilLists;
 
 import javax.servlet.http.HttpServletRequest;
@@ -107,11 +108,11 @@ public class UserSnippetController {
     }
 
     private void getProgrammingLanguagesAndUserFolders(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        List<String> programmingLanguages = utilLists.getLanguages();
+//        List<String> programmingLanguages = utilLists.getLanguages();
+        List<String> programmingLanguages = Languages.getLanguages();
         List<String> folderList = (snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()) == null) ? utilLists.getDefaultFolder() : snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail());
         model.addAttribute("programmingLanguages", programmingLanguages);
         model.addAttribute("folderList", folderList);
     }
-
 
 }

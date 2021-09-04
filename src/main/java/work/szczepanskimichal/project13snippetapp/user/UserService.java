@@ -61,6 +61,16 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public Boolean isThisTheLastAdmin(User user) {
+        if (user.getRole().getName().equals("ROLE_ADMIN")) {
+            if (userRepository.countAllByRole(user.getRole()) == 1) {
+                System.out.println("TEMPORARY: DELETING LAST ADMIN!!!");
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Boolean validateAccountKey(String key) {
         if (userRepository.findByAccountKey(key) != null) {
             LocalDateTime expirationDate = userRepository.findByAccountKey(key).getAccountKeyExpirationDate();
@@ -144,5 +154,7 @@ public class UserService {
         adminUpdateUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
         return adminUpdateUserDTO;
     }
+
+
 
 }

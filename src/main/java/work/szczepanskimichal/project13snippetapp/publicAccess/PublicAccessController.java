@@ -57,7 +57,7 @@ public class PublicAccessController {
         }
         User user = userService.convertCreateUserDTOToUser(createUserDTO);
         userService.saveUser(user);
-        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKey());
+//        emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKey());
         return "public/confirm-user-email";
     }
 
@@ -79,5 +79,6 @@ public class PublicAccessController {
     public String notAllowed403() {
         return "public/403";
     }
+
 
 }

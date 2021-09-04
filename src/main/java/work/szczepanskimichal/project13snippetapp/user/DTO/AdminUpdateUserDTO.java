@@ -7,6 +7,7 @@ import work.szczepanskimichal.project13snippetapp.validator.*;
 
 @Data
 @NoArgsConstructor
+//@PasswordMatch ??? not here before
 @AdminUniqueEmail
 @AdminUniqueUsername
 public class AdminUpdateUserDTO extends User {

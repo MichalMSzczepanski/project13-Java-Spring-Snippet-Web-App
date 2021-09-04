@@ -138,8 +138,13 @@ public class AdminController {
         return "admin/user-details";
     }
 
+    // TODO test this method and add validation if you're not deleting yourself!
     @GetMapping("/delete/{id}")
-    public String adminDeleteUser(@PathVariable Long id) {
+    public String adminDeleteUser(@PathVariable Long id, Model model) {
+        if (userService.isThisTheLastAdmin(userService.findByUserId(id))) {
+            model.addAttribute("lastAdminConfirmed", true);
+            return "public/error";
+        }
         userService.delete(userService.findByUserId(id));
         return "redirect:/admin/manage-user-accounts";
     }

@@ -43,6 +43,7 @@ public class User {
 
     @ManyToOne
     private Role role;
+
     private String apiKey;
     private String accountKey;
     private LocalDateTime accountKeyCreated;
