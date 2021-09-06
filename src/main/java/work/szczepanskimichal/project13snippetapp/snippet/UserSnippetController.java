@@ -1,7 +1,6 @@
 package work.szczepanskimichal.project13snippetapp.snippet;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +8,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 //import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
 import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
-import work.szczepanskimichal.project13snippetapp.user.User;
-import work.szczepanskimichal.project13snippetapp.user.UserService;
 import work.szczepanskimichal.project13snippetapp.utils.Languages;
 import work.szczepanskimichal.project13snippetapp.utils.UtilLists;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,14 +24,32 @@ public class UserSnippetController {
     private final UtilLists utilLists;
     private final SnippetService snippetService;
 
-    //    TODO details in user dashboard
-    @GetMapping("/dashboard")
-    public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+//    //    TODO details in user dashboard
+//    @GetMapping("/dashboard")
+//    public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+//        model.addAttribute("currentUser", currentUser.getUser());
+//        List<String> folderList = snippetService.findAllUserFolders(currentUser.getUser().getEmail());
+//        List<Snippet> snippetList = snippetService.findAllUserSnippets(currentUser.getUser().getEmail());
+//        model.addAttribute("folderList", folderList);
+//        model.addAttribute("snippetList", snippetList);
+//        return "user/dashboard";
+//    }
+
+    @GetMapping({"/dashboard", "dashboard/{folder}","/dashboard/{folder}/{id}"})
+    public String userDashboardByFolder(@AuthenticationPrincipal CurrentUser currentUser,
+                                        @PathVariable(required = false) String folder,
+                                        @PathVariable(required = false) Long id, Model model) {
         model.addAttribute("currentUser", currentUser.getUser());
-        List<String> folderList = snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail());
-        List<Snippet> snippetList = snippetService.findAllUserSnippets(currentUser.getUser().getEmail());
+        List<String> folderList = snippetService.findAllUserFolders(currentUser.getUser().getEmail());
         model.addAttribute("folderList", folderList);
-        model.addAttribute("snippetList", snippetList);
+        if (folder != null) {
+            List<Snippet> snippetList = snippetService.findAllUserSnippetsByFolder(folder, currentUser.getUser());
+            model.addAttribute("snippetList", snippetList);
+            if (id != null){
+                Snippet currentSnippet = snippetService.getUserSnippetByID(id);
+                model.addAttribute("currentSnippet", currentSnippet);
+            }
+        }
         return "user/dashboard";
     }
 
@@ -47,7 +61,9 @@ public class UserSnippetController {
     }
 
     @PostMapping("/add-snippet")
-    public String userAddSnippetPost(@AuthenticationPrincipal CurrentUser currentUser, @ModelAttribute("snippet") @Valid Snippet snippet, BindingResult result, HttpServletRequest request, Model model) {
+    public String userAddSnippetPost(@AuthenticationPrincipal CurrentUser currentUser,
+                                     @ModelAttribute("snippet") @Valid Snippet snippet,
+                                     BindingResult result, HttpServletRequest request, Model model) {
         System.out.println("this is the snippet: " + snippet);
         if(result.hasErrors()) {
             getProgrammingLanguagesAndUserFolders(currentUser, model);
@@ -82,10 +98,9 @@ public class UserSnippetController {
             snippet.setFolder(request.getParameter("inputedFolder"));
         }
         snippetService.saveSnippet(snippet, currentUser.getUser().getId());
-        return "redirect:/user/user-snippet-details/" + snippet.getId();
+        return "redirect:/user/snippet-details/" + snippet.getId();
     }
 
-    // view single snippet
     @GetMapping("/snippet-details/{id}")
     public String viewUserSnippetDetails(@AuthenticationPrincipal CurrentUser currentUser,@PathVariable Long id, Model model) {
         Snippet snippet = snippetService.getUserSnippetByID(id);
@@ -109,11 +124,9 @@ public class UserSnippetController {
     }
 
     private void getProgrammingLanguagesAndUserFolders(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        List<String> programmingLanguages = utilLists.getLanguages();
-//        List<String> programmingLanguages = Languages.getLanguages();
-//        List<String> temp = utilLists.getDefaultFolder();
-        List<String> folderList = (snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()).isEmpty() || snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()) == null)
-                ? utilLists.getDefaultFolder() : snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail());
+        List<String> programmingLanguages = Languages.getLanguages();
+        List<String> folderList = (snippetService.findAllUserFolders(currentUser.getUser().getEmail()).isEmpty() || snippetService.findAllUserFolders(currentUser.getUser().getEmail()) == null)
+                ? utilLists.getDefaultFolder() : snippetService.findAllUserFolders(currentUser.getUser().getEmail());
         model.addAttribute("programmingLanguages", programmingLanguages);
         model.addAttribute("folderList", folderList);
     }

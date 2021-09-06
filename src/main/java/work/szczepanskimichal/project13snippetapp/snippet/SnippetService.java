@@ -18,18 +18,19 @@ public class SnippetService {
     public List<Snippet> findAllUserSnippets(String email) {
         return snippetRepository.findAllUserSnippets(email);
     }
-    public List<String> findAllFoldersOfUser(String email) {
-        return snippetRepository.findAllFoldersOfUser(email);
+
+    public List<Snippet> findAllUserSnippetsByFolder(String folder, User owner) {
+        return snippetRepository.findSnippetsByFolderAndOwner(folder, owner);
     }
+
+    public List<String> findAllUserFolders(String email) { return snippetRepository.findAllFoldersOfUser(email); }
 
     public void saveSnippet(Snippet snippet, Long id) {
         snippet.setOwner(userService.findByUserId(id));
         snippetRepository.save(snippet);
     }
 
-    public Snippet getUserSnippetByID(Long id) {
-        return snippetRepository.findById(id).orElse(null);
-    }
+    public Snippet getUserSnippetByID(Long id) { return snippetRepository.findById(id).orElse(null); }
 
     public void deleteUserSnippetById(Long id) {
         snippetRepository.delete(getUserSnippetByID(id));

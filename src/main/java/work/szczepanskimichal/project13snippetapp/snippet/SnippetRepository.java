@@ -51,7 +51,10 @@ public interface SnippetRepository extends JpaRepository<Snippet, Long> {
 
     @Query("select distinct s.folder from Snippet s where s.owner.email like %?1%")
     List<String> findAllFoldersOfUser(String email);
-//    List<Snippet> findSnippetsByVisibility(String visibility);
+
+    List<Snippet> findSnippetsByFolderAndOwner(String folder, User owner);
+
+;//    List<Snippet> findSnippetsByVisibility(String visibility);
 //    List<Snippet> findSnippetsByProgrammingLanguage(String programmingLanugage);
 //    List<Snippet> findSnippetsByFolder(String folder);
 //    List<Snippet> findSnippetsByTitle(String title);

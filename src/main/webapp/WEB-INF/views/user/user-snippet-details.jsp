@@ -26,6 +26,7 @@
             <code><textarea readonly rows="15" cols="100">${snippet.snippetContent}</textarea></code><br>
 <%--            <code>${snippet.snippetContent}</code><br><br>--%>
 
+            <a class="btn btn-primary btn-lg" href="/user/dashboard/${snippet.folder}/${snippet.id}" role="button">view in dashboard</a><br><br>
             <a class="btn btn-primary btn-lg" href="/user/edit-snippet/${snippet.id}" role="button">Edit snippet</a><br><br>
             <a class="btn btn-primary btn-lg" href="/user/delete-snippet/${snippet.id}" role="button">Delete snippet</a><br><br>
         </div>
