@@ -48,6 +48,7 @@ public class UserSnippetController {
 
     @PostMapping("/add-snippet")
     public String userAddSnippetPost(@AuthenticationPrincipal CurrentUser currentUser, @ModelAttribute("snippet") @Valid Snippet snippet, BindingResult result, HttpServletRequest request, Model model) {
+        System.out.println("this is the snippet: " + snippet);
         if(result.hasErrors()) {
             getProgrammingLanguagesAndUserFolders(currentUser, model);
             return "user/user-snippet-add";
@@ -56,7 +57,7 @@ public class UserSnippetController {
             snippet.setFolder(request.getParameter("inputedFolder"));
         }
         snippetService.saveSnippet(snippet, currentUser.getUser().getId());
-        return "redirect:/user/user-snippet-details/" + snippet.getId();
+        return "redirect:/user/snippet-details/" + snippet.getId();
     }
 
     @GetMapping("/edit-snippet/{id}")
@@ -73,10 +74,10 @@ public class UserSnippetController {
 
     @PostMapping("/edit-snippet/{id}")
     public String editUserSnippetPost(@AuthenticationPrincipal CurrentUser currentUser, @Valid Snippet snippet, BindingResult result, HttpServletRequest request, Model model) {
-//        if(result.hasErrors()) {
-//            getProgrammingLanguagesAndUserFolders(currentUser, model);
-//            return "user/user-snippet-edit";
-//        }
+        if(result.hasErrors()) {
+            getProgrammingLanguagesAndUserFolders(currentUser, model);
+            return "user/user-snippet-edit";
+        }
         if(request.getParameter("inputedFolder") != null & request.getParameter("inputedFolder") != "") {
             snippet.setFolder(request.getParameter("inputedFolder"));
         }
@@ -85,7 +86,7 @@ public class UserSnippetController {
     }
 
     // view single snippet
-    @GetMapping("/user-snippet-details/{id}")
+    @GetMapping("/snippet-details/{id}")
     public String viewUserSnippetDetails(@AuthenticationPrincipal CurrentUser currentUser,@PathVariable Long id, Model model) {
         Snippet snippet = snippetService.getUserSnippetByID(id);
         if(snippet.getOwner().getId() == currentUser.getUser().getId()) {
@@ -108,9 +109,11 @@ public class UserSnippetController {
     }
 
     private void getProgrammingLanguagesAndUserFolders(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-//        List<String> programmingLanguages = utilLists.getLanguages();
-        List<String> programmingLanguages = Languages.getLanguages();
-        List<String> folderList = (snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()) == null) ? utilLists.getDefaultFolder() : snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail());
+        List<String> programmingLanguages = utilLists.getLanguages();
+//        List<String> programmingLanguages = Languages.getLanguages();
+//        List<String> temp = utilLists.getDefaultFolder();
+        List<String> folderList = (snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()).isEmpty() || snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail()) == null)
+                ? utilLists.getDefaultFolder() : snippetService.findAllFoldersOfUser(currentUser.getUser().getEmail());
         model.addAttribute("programmingLanguages", programmingLanguages);
         model.addAttribute("folderList", folderList);
     }

@@ -29,8 +29,8 @@
         Yes<form:radiobutton path="favorite" value="yes"/><br><br>
 
         <b>Visibility</b><br>
-        Public<form:radiobutton path="visibility" value="public" checked="checked"/>
-        Private<form:radiobutton path="visibility" value="private"/><br><br>
+        Private<form:radiobutton path="visibility" value="private" checked="checked"/>
+        Public<form:radiobutton path="visibility" value="public"/><br><br>
 
         <b>Programming language</b><br>
         <form:select path="programmingLanguage">
@@ -41,6 +41,7 @@
         <form:select path="folder">
             <form:options items="${folderList}"></form:options>
         </form:select><br><br>
+        <form:errors path="folder"/><br>
 
         <b>... or create new folder</b><br>
         <input type="text" name="inputedFolder"><br><br>
@@ -49,7 +50,7 @@
 
         <b>Snippet content</b><br>
         <form:textarea path="snippetContent" rows="15" cols="75"/><br>
-        <form:errors path="snippetContent"/><br>
+        <form:errors path="snippetContent" cssClass="alert alert-danger" /><br>
 
         <input type="submit">
     </form:form>

@@ -29,7 +29,7 @@ public class UtilLists {
         colors.add("muted");
         colors.add("white");
 
-//        temporarry list
+//        temporary list
         languages = new ArrayList<>();
         languages.add("Java");
         languages.add("Python");

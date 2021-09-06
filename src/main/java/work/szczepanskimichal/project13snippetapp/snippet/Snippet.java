@@ -33,7 +33,7 @@ public class Snippet {
     private String programmingLanguage;
 
     @Column(columnDefinition = "varchar(255) default 'uncategorized'")
-    @NotBlank
+//    @NotBlank
     private String folder;
 
     @Column(columnDefinition = "varchar(255)")
