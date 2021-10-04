@@ -21,7 +21,7 @@
 
         <b>Title</b><br>
         <form:input type="text" path="title"/><br>
-        <form:errors path="title"/><br>
+        <form:errors cssClass="d-block mt-2 alert alert-danger" path="title"/><br>
 
         <b>Favorite</b><br>
         No<form:radiobutton path="favorite" value="no" checked="checked"/>
@@ -48,7 +48,7 @@
 
         <b>Snippet content</b><br>
         <form:textarea path="snippetContent" rows="15" cols="75"/><br>
-        <form:errors path="snippetContent"/><br>
+        <form:errors cssClass="d-block mt-2 alert alert-danger" path="snippetContent"/><br>
 
         <input type="submit">
     </form:form><br><br>
