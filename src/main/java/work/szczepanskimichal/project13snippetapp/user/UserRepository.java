@@ -1,10 +1,12 @@
 package work.szczepanskimichal.project13snippetapp.user;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import work.szczepanskimichal.project13snippetapp.role.Role;
 
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 
 @Repository
 @Transactional

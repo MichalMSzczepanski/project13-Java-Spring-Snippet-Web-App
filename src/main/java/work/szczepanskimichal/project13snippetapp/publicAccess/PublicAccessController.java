@@ -68,7 +68,6 @@ public class PublicAccessController {
             User user = userService.findByKey(key);
             user.setEnabled(1);
             user.setAccountKey(null);
-//            user.setAccountKeCreated(null);
             user.setAccountKeyExpirationDate(null);
             userService.update(user);
         }

@@ -2,6 +2,9 @@ package work.szczepanskimichal.project13snippetapp.user;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.project13snippetapp.role.RoleRepository;
@@ -10,6 +13,8 @@ import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.utils.KeyGenerator;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -32,7 +37,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User findByUserId(Long id) { return userRepository.findById(id).orElse(null); }
+    public User findByUserId(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 
     public User findByUserName(String username) {
         return userRepository.findByUsername(username);
@@ -42,7 +49,9 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User findByKey(String key) { return userRepository.findByAccountKey(key); }
+    public User findByKey(String key) {
+        return userRepository.findByAccountKey(key);
+    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -74,14 +83,14 @@ public class UserService {
     public Boolean validateAccountKey(String key) {
         if (userRepository.findByAccountKey(key) != null) {
             LocalDateTime expirationDate = userRepository.findByAccountKey(key).getAccountKeyExpirationDate();
-            if(LocalDateTime.now().compareTo(expirationDate) < 1) {
+            if (LocalDateTime.now().compareTo(expirationDate) < 1) {
                 return true;
             }
         }
         return false;
     }
 
-    public User convertCreateUserDTOToUser (CreateUserDTO createUserDTO) {
+    public User convertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
         User user = new User();
         user.setId(createUserDTO.getId()); // added
         user.setEmail(createUserDTO.getEmail());
@@ -96,7 +105,7 @@ public class UserService {
         return user;
     }
 
-    public User convertAdminUpdateUserDTOToUser (AdminUpdateUserDTO adminUpdateUserDTO) {
+    public User convertAdminUpdateUserDTOToUser(AdminUpdateUserDTO adminUpdateUserDTO) {
         User user = new User();
         user.setId(adminUpdateUserDTO.getId()); // added
         user.setEmail(adminUpdateUserDTO.getEmail());
@@ -111,7 +120,7 @@ public class UserService {
         return user;
     }
 
-    public User adminConvertCreateUserDTOToUser (CreateUserDTO createUserDTO) {
+    public User adminConvertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
         User user = new User();
         user.setEmail(createUserDTO.getEmail());
         user.setUsername(createUserDTO.getUsername());
@@ -125,7 +134,7 @@ public class UserService {
         return user;
     }
 
-    public CreateUserDTO adminConvertUserToCreateUserDTO (User user) {
+    public CreateUserDTO adminConvertUserToCreateUserDTO(User user) {
         CreateUserDTO createUserDTO = new CreateUserDTO();
         createUserDTO.setId(user.getId());
         createUserDTO.setEmail(user.getEmail());
@@ -140,7 +149,7 @@ public class UserService {
         return createUserDTO;
     }
 
-    public AdminUpdateUserDTO adminConvertUserToAdminUpdateUserDTO (User user) {
+    public AdminUpdateUserDTO adminConvertUserToAdminUpdateUserDTO(User user) {
         AdminUpdateUserDTO adminUpdateUserDTO = new AdminUpdateUserDTO();
         adminUpdateUserDTO.setId(user.getId());
         adminUpdateUserDTO.setEmail(user.getEmail());
@@ -155,6 +164,19 @@ public class UserService {
         return adminUpdateUserDTO;
     }
 
+    public long countAllUsers() {
+        return userRepository.count();
+    }
 
+    public List<User> getUsersForAdmin(int pageNumber) {
+        int numberOfPages = Math.round(countAllUsers()/10) + 1;
+        if(pageNumber > numberOfPages || pageNumber <= 0) {
+            return null;
+        } else {
+            Page<User> userPage = userRepository.findAll(PageRequest.of(pageNumber - 1, 10));
+            return userPage.getContent();
+        }
+
+    }
 
 }

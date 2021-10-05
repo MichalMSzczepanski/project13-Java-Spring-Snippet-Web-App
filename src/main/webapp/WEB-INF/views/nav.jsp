@@ -36,7 +36,7 @@
                     <a class="nav-link" href="#"> | </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/manage-user-accounts"><span class="text-danger">Manage User Accounts</span></a>
+                    <a class="nav-link" href="/admin/manage-user-accounts/1"><span class="text-danger">Manage User Accounts</span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#"> | </a>

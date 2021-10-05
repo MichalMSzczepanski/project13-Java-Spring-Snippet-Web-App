@@ -1,5 +1,8 @@
 package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -106,10 +109,16 @@ public class AdminController {
         return "redirect:/";
     }
 
-    @GetMapping("/manage-user-accounts")
-    public String manageUserAccountsGet(Model model) {
-        model.addAttribute("userList", userService.getAllUsers());
-        return "admin/manage-user-accounts";
+    @GetMapping("/manage-user-accounts/{pageNumber}")
+    public String manageUserAccountsGet(Model model, @PathVariable int pageNumber) {
+        if (!(userService.getUsersForAdmin(pageNumber) == null)) {
+            model.addAttribute("userList", userService.getUsersForAdmin(pageNumber));
+            model.addAttribute("numberOfUsers", userService.countAllUsers());
+            return "admin/manage-user-accounts";
+        } else {
+            return "redirect:/admin/manage-user-accounts/1";
+        }
+
     }
 
     @GetMapping("/edit-user/{id}")
@@ -144,9 +153,10 @@ public class AdminController {
         if (userService.isThisTheLastAdmin(userService.findByUserId(id))) {
             model.addAttribute("lastAdminConfirmed", true);
             return "public/error";
+        } else {
+            userService.delete(userService.findByUserId(id));
+            return "redirect:/admin/manage-user-accounts";
         }
-        userService.delete(userService.findByUserId(id));
-        return "redirect:/admin/manage-user-accounts";
     }
 
     @ModelAttribute("roleList")
