@@ -114,9 +114,9 @@ public class UserService {
         user.setEnabled(0);
         user.setRole(adminUpdateUserDTO.getRole()); // added
         user.setApiKey(keyGenerator.generateApiKey());
-        user.setAccountKey(keyGenerator.generateAccountKey());
-        user.setAccountKeyCreated(LocalDateTime.now());
-        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
+        user.setAccountKey(null);
+        user.setAccountKeyCreated(adminUpdateUserDTO.getAccountKeyCreated());
+        user.setAccountKeyExpirationDate(null);
         return user;
     }
 

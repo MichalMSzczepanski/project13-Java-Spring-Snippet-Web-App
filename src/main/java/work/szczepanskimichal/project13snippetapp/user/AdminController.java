@@ -1,8 +1,5 @@
 package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -95,7 +92,6 @@ public class AdminController {
     public String updateUserPasswordGet(Model model) {
         model.addAttribute("userPasswords", new UserPasswordUpdateDTO());
         return "admin/update-admin-password";
-        //    TODO send email with link to change password?
     }
 
     @PostMapping("/update-admin-password")
@@ -118,7 +114,6 @@ public class AdminController {
         } else {
             return "redirect:/admin/manage-user-accounts/1";
         }
-
     }
 
     @GetMapping("/edit-user/{id}")
@@ -126,15 +121,16 @@ public class AdminController {
         AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
         adminUpdateUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
         model.addAttribute("adminUpdateUserDTO", adminUpdateUserDTO);
+        System.out.println("test object contents: " + adminUpdateUserDTO);
         return "admin/edit-user";
     }
 
-// TODO walidator do DTO dla maila u username'a ponizej
     @PostMapping("/edit-user/{id}")
     public String editUserAccountPost(@Valid AdminUpdateUserDTO adminUpdateUserDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
-            System.out.println(adminUpdateUserDTO.getPasswordConfirmation());
+//            TBC validation and below code
+//            userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO);
+//            adminUpdateUserDTO.getPasswordConfirmation();
             return "admin/edit-user";
         }
         userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));

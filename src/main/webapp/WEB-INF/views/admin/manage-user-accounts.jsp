@@ -33,9 +33,7 @@
                 <tbody>
                 <c:forEach items="${userList}" var="user" varStatus="loop">
                     <tr>
-                        <th scope="row">
-                                <c:out value="${(loop.index + 1) == 10 ? pageNumber * 10 : pageNumber * 10 - 10 + loop.index + 1}"/>
-                        </th>
+                        <th scope="row"> <c:out value="${(loop.index + 1) == 10 ? pageNumber * 10 : pageNumber * 10 - 10 + loop.index + 1}"/></th>
                         <th scope="row">${user.id}</th>
                         <td><a href="/admin/user-details/${user.id}">${user.username}</a></td>
                         <td>${user.email}</td>

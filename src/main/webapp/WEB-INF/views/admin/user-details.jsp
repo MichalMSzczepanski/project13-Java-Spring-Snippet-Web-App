@@ -24,7 +24,8 @@
           <p>Account Created: ${user.accountKeyCreated}</p>
           <p>Account Expiration Date: ${user.accountKeyExpirationDate}</p>
         </div>
-        <a class="btn btn-warning btn-lg" href="/admin/delete/${user.id}" role="button">Delete User</a><br>
+        <a class="btn btn-warning btn-lg" href="/admin/edit-user/${user.id}" role="button">Edit User</a><br>
+        <a class="btn btn-danger btn-lg" href="/admin/delete/${user.id}" role="button">Delete User</a><br>
     </div>
 
 </div>
