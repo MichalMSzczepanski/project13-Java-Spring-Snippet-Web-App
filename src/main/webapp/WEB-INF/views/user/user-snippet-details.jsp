@@ -22,6 +22,10 @@
             visibility: ${snippet.visibility}<br>
             created on: ${snippet.createdOn}<br>
             updated on: ${snippet.updatedOn}<br>
+            tags:
+            <c:forEach items="${snippet.tags}" var="tag">
+                ${tag.tagName};
+            </c:forEach><br>
             content:<br><br>
             <code><textarea readonly rows="15" cols="100">${snippet.snippetContent}</textarea></code><br>
 <%--            <code>${snippet.snippetContent}</code><br><br>--%>

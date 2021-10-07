@@ -1,10 +1,8 @@
 package work.szczepanskimichal.project13snippetapp.snippet;
 
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 import work.szczepanskimichal.project13snippetapp.tag.Tag;
 import work.szczepanskimichal.project13snippetapp.user.User;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

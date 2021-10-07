@@ -26,9 +26,14 @@
             SNIPPETS
         </div>
         <div class="col-8 border border-dark">
-            <c:if test="${not empty currentSnippet}">
-                ${currentSnippet.getTitle()}
-            </c:if>
+            <c:choose>
+                <c:when test="${not empty currentSnippet}">
+                    ${currentSnippet.getTitle()}
+                </c:when>
+                <c:otherwise>
+                    SNIPPET CONTENT
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
     <div class="row justify-content-start">
@@ -39,7 +44,14 @@
         </div>
         <div class="col-2 border border-dark">
             <c:if test="${empty snippetList}">
-            choose folder
+                <c:choose>
+                    <c:when test="${empty folderList}">
+                        no snippets found, add your first snippet!
+                    </c:when>
+                    <c:otherwise>
+                        choose folder
+                    </c:otherwise>
+                </c:choose>
             </c:if>
             <c:forEach items="${snippetList}" var="snippet">
                 <a href="/user/dashboard/${snippet.folder}/${snippet.id}">${snippet.title}</a><br>
@@ -56,7 +68,16 @@
                 Language: ${currentSnippet.programmingLanguage} |
                 Visibility: ${currentSnippet.favorite} |
                 <a href="/user/snippet-details/${currentSnippet.id}">DETAILS</a> |
-                <a href="/user/edit-snippet/${currentSnippet.id}">EDIT</a>
+                <a href="/user/edit-snippet/${currentSnippet.id}">EDIT</a><br>
+                Tags:
+                <c:if test="${not empty currentSnippet.tags}">
+                    <c:forEach items="${currentSnippet.tags}" var="tag">
+                        ${tag.tagName};
+                    </c:forEach>
+                </c:if>
+                <c:if test="${empty currentSnippet.tags}">
+                    none
+                </c:if>
             </div>
             <div>
                 <textarea rows="20" cols="75"> ${currentSnippet.getSnippetContent()}</textarea>

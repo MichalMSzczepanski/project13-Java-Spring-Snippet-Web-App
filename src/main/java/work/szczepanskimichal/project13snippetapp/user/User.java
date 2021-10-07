@@ -2,8 +2,10 @@ package work.szczepanskimichal.project13snippetapp.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 import org.springframework.security.core.GrantedAuthority;
 import work.szczepanskimichal.project13snippetapp.role.Role;
+import work.szczepanskimichal.project13snippetapp.tag.Tag;
 import work.szczepanskimichal.project13snippetapp.validator.PasswordMatch;
 import work.szczepanskimichal.project13snippetapp.validator.UniqueEmail;
 import work.szczepanskimichal.project13snippetapp.validator.UniqueUsername;
@@ -12,6 +14,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,6 +46,9 @@ public class User {
 
     @ManyToOne
     private Role role;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Tag> tags;
 
     private String apiKey;
     private String accountKey;

@@ -56,6 +56,7 @@ public class AdminController {
         User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
         user.setEnabled(createUserDTO.getEnabled());
         user.setRole(createUserDTO.getRole());
+        user.setAccountKeyCreated(LocalDateTime.now());
         if(emailConfirmationFollowUp.equals("yes")) {
             String key = simpleKeyGenerator.generateAccountKey();
             user.setAccountKey(key);
