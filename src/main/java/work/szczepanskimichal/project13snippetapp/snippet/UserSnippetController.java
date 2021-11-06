@@ -31,19 +31,6 @@ public class UserSnippetController {
 
     private final UtilLists utilLists;
     private final SnippetService snippetService;
-    private final UserService userService;
-    private final TagService tagService;
-
-//    //    TODO details in user dashboard
-//    @GetMapping("/dashboard")
-//    public String userDashboard(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-//        model.addAttribute("currentUser", currentUser.getUser());
-//        List<String> folderList = snippetService.findAllUserFolders(currentUser.getUser().getEmail());
-//        List<Snippet> snippetList = snippetService.findAllUserSnippets(currentUser.getUser().getEmail());
-//        model.addAttribute("folderList", folderList);
-//        model.addAttribute("snippetList", snippetList);
-//        return "user/dashboard";
-//    }
 
     @GetMapping({"/dashboard", "dashboard/{folder}","/dashboard/{folder}/{id}"})
     public String userDashboardByFolder(@AuthenticationPrincipal CurrentUser currentUser,
@@ -80,31 +67,10 @@ public class UserSnippetController {
             return "user/user-snippet-manage";
         }
 
-        String inputtedFolder = request.getParameter("inputtedFolder");
-        if(inputtedFolder != null && inputtedFolder != "") {
-            snippet.setFolder(inputtedFolder);
-        }
-
-        String inputtedTags = request.getParameter("inputtedTags");
-        if(inputtedTags != null && inputtedTags != "") {
-            List<String> newTagStrings = Arrays.asList(inputtedTags.trim().split("\\s*,+\\s*,*\\s*"));
-
-
-            List<Tag> currentSnippetTags = (snippet.getTags() != null ? snippet.getTags() : new ArrayList<>());
-            List<Tag> newTags = newTagStrings.stream()
-                    .map(s -> new Tag(null, s, null))
-                    .collect(Collectors.toList());
-
-            User user = currentUser.getUser();
-            List<Tag> userTags = (user.getTags() != null ? user.getTags() : new ArrayList<>());
-            for(Tag tag : newTags) {
-                currentSnippetTags.add(tag);
-                userTags.add(tag);
-                tagService.save(tag);
-            }
-            userService.update(user);
-        }
+        snippetService.setSnippetFolder(snippet, request.getParameter("inputtedFolder"));
+        snippetService.setSnippetTagsAndUserTags(snippet,request.getParameter("inputtedTags") , currentUser.getUser());
         snippetService.saveSnippet(snippet, currentUser.getUser().getId());
+
         return "redirect:/user/snippet-details/" + snippet.getId();
     }
 
@@ -128,29 +94,11 @@ public class UserSnippetController {
             getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
             return "user/user-snippet-edit";
         }
-        if(request.getParameter("inputedFolder") != null & request.getParameter("inputedFolder") != "") {
-            snippet.setFolder(request.getParameter("inputedFolder"));
-        }
-        String inputtedTags = request.getParameter("inputtedTags");
-        if(inputtedTags != null && inputtedTags != "") {
-            List<String> newTagStrings = Arrays.asList(inputtedTags.trim().split("\\s*,+\\s*,*\\s*"));
 
-
-            List<Tag> currentSnippetTags = (snippet.getTags() != null ? snippet.getTags() : new ArrayList<>());
-            List<Tag> newTags = newTagStrings.stream()
-                    .map(s -> new Tag(null, s, null))
-                    .collect(Collectors.toList());
-
-            User user = currentUser.getUser();
-            List<Tag> userTags = (user.getTags() != null ? user.getTags() : new ArrayList<>());
-            for(Tag tag : newTags) {
-                currentSnippetTags.add(tag);
-                userTags.add(tag);
-                tagService.save(tag);
-            }
-            userService.update(user);
-        }
+        snippetService.setSnippetFolder(snippet, request.getParameter("inputtedFolder"));
+        snippetService.setSnippetTagsAndUserTags(snippet,request.getParameter("inputtedTags") , currentUser.getUser());
         snippetService.saveSnippet(snippet, currentUser.getUser().getId());
+
         return "redirect:/user/snippet-details/" + snippet.getId();
     }
 

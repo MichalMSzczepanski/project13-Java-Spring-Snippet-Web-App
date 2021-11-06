@@ -81,7 +81,6 @@
             </div>
             <div>
                 <textarea rows="20" cols="75"> ${currentSnippet.getSnippetContent()}</textarea>
-
             </div>
             </c:if>
         </div>
