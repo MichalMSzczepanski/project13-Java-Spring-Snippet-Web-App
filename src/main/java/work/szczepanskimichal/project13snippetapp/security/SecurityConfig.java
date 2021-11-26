@@ -22,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .and().logout().logoutSuccessUrl("/")
                 .permitAll()
+//                .and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
                 .and().exceptionHandling().accessDeniedPage("/403");
     }
 

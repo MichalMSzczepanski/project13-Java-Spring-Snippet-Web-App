@@ -1,6 +1,7 @@
 package work.szczepanskimichal.project13snippetapp.tag;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import work.szczepanskimichal.project13snippetapp.utils.Colors;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.Size;
 @Table(name = Tag.TABLE_NAME)
 @Data
 @AllArgsConstructor
+@Builder
 public class Tag {
 
     static final String TABLE_NAME = "tags";

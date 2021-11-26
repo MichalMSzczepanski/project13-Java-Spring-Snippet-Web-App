@@ -1,6 +1,6 @@
 package work.szczepanskimichal.project13snippetapp.publicAccess;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,12 +10,12 @@ import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
 import work.szczepanskimichal.project13snippetapp.utils.EmailService;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+@Log4j2
 @Controller
 @RequiredArgsConstructor
 public class PublicAccessController {
@@ -29,17 +29,20 @@ public class PublicAccessController {
     }
 
     @GetMapping("/login")
-    public String loginGet(HttpServletRequest request) {
+    public String login(HttpServletRequest request) {
         Map<String, String[]> param = request.getParameterMap();
         if (param.containsKey("error")) {
+            log.info("ineffective login from IP: " + request.getRemoteAddr());
             request.setAttribute("loginError", true);
         }
+        log.info("user logged in from IP: " + request.getRemoteAddr());
         return "public/login";
     }
 
     @GetMapping("/logout")
     public String logout() {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
+        log.info("user logged out: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 //        doesn't redirect to homepage BUT login
         return "redirect:/";
     }

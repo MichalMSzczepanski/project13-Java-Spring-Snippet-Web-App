@@ -92,7 +92,7 @@
                     </c:choose>
                 </div>
                 <div class="w-50">
-                    <b> and/ or add new tags</b><br>
+                    <b> and/ or add new tags (delimiter: ",")</b><br>
                     <input type="text" name="inputtedTags" class="w-75"><br><br>
                 </div>
             </div><br>

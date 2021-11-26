@@ -50,7 +50,7 @@
                 <c:choose>
                     <c:when test="${not empty userTags}">
                         <form:select path="tags" multiple="true" class="w-75">
-                            <%--                            <form:options items="${userTags}"/>--%>
+                                                        <form:options items="${userTags}"/>
                             <c:forEach items="${userTags}" var="tag">
                                 <form:option value="${tag.id}" label="${tag.tagName}" />
                             </c:forEach>

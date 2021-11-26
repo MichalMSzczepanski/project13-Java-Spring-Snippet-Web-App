@@ -33,26 +33,15 @@ public class UserSnippetController {
     private final SnippetService snippetService;
 
     @GetMapping({"/dashboard", "dashboard/{folder}","/dashboard/{folder}/{id}"})
-    public String userDashboardByFolder(@AuthenticationPrincipal CurrentUser currentUser,
+    public String getUserDashboard(@AuthenticationPrincipal CurrentUser currentUser,
                                         @PathVariable(required = false) String folder,
                                         @PathVariable(required = false) Long id, Model model) {
-        model.addAttribute("currentUser", currentUser.getUser());
-        List<String> folderList = snippetService.findAllUserFolders(currentUser.getUser().getEmail());
-        model.addAttribute("folderList", folderList);
-        if (folder != null) {
-            List<Snippet> snippetList = snippetService.findAllUserSnippetsByFolder(folder, currentUser.getUser());
-            model.addAttribute("snippetList", snippetList);
-            if (id != null){
-                Snippet currentSnippet = snippetService.getUserSnippetByID(id);
-                model.addAttribute("currentSnippet", currentSnippet);
-            }
-        }
-        return "user/dashboard";
+        return snippetService.returnUserDashboard(currentUser, folder, id, model);
     }
 
     @GetMapping("/add-snippet")
     public String userAddSnippet(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
+        snippetService.getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
         model.addAttribute("snippet", new Snippet());
         model.addAttribute("newSnippet", true);
         return "user/user-snippet-manage";
@@ -63,7 +52,7 @@ public class UserSnippetController {
                                      @ModelAttribute("snippet") @Valid Snippet snippet,
                                      BindingResult result, HttpServletRequest request, Model model) {
         if(result.hasErrors()) {
-            getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
+            snippetService.getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
             return "user/user-snippet-manage";
         }
 
@@ -79,7 +68,7 @@ public class UserSnippetController {
         Snippet snippet = snippetService.getUserSnippetByID(id);
         if(snippet.getOwner().getId() == currentUser.getUser().getId()) {
             model.addAttribute("snippet", snippet);
-            getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
+            snippetService.getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
 //            return "user/user-snippet-edit";
             model.addAttribute("newSnippet", false);
             return "user/user-snippet-manage";
@@ -91,7 +80,7 @@ public class UserSnippetController {
     @PostMapping("/edit-snippet/{id}")
     public String editUserSnippetPost(@AuthenticationPrincipal CurrentUser currentUser, @Valid Snippet snippet, BindingResult result, HttpServletRequest request, Model model) {
         if(result.hasErrors()) {
-            getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
+            snippetService.getProgrammingLanguagesAndUserFoldersAndUserTags(currentUser, model);
             return "user/user-snippet-edit";
         }
 
@@ -115,23 +104,7 @@ public class UserSnippetController {
 
     @GetMapping("/delete-snippet/{id}")
     public String deleteUserSnippet(@AuthenticationPrincipal CurrentUser currentUser, @PathVariable Long id) {
-        Snippet snippet = snippetService.getUserSnippetByID(id);
-        if(snippet.getOwner().getId() == currentUser.getUser().getId()) {
-            snippetService.deleteUserSnippetById(id);
-            return "user/dashboard";
-        } else {
-            return "public/error";
-        }
-    }
-
-    private void getProgrammingLanguagesAndUserFoldersAndUserTags(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
-        List<String> programmingLanguages = Languages.getLanguages();
-        List<String> folderList = (snippetService.findAllUserFolders(currentUser.getUser().getEmail()).isEmpty() || snippetService.findAllUserFolders(currentUser.getUser().getEmail()) == null)
-                ? utilLists.getDefaultFolder() : snippetService.findAllUserFolders(currentUser.getUser().getEmail());
-        List<Tag> userTags = currentUser.getUser().getTags();
-        model.addAttribute("programmingLanguages", programmingLanguages);
-        model.addAttribute("folderList", folderList);
-        model.addAttribute("userTags", userTags);
+        return snippetService.deleteUserSnippetById(id, currentUser);
     }
 
 }

@@ -17,6 +17,7 @@ public interface SnippetRepository extends JpaRepository<Snippet, Long> {
     // crud
     Snippet save(Snippet snippet);
     void delete(Snippet snippet);
+    boolean existsById(Long id);
     void deleteById(Long id);
 
     // admin master queries (public nad private)
