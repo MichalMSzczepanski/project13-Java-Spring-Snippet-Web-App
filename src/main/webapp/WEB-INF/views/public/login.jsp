@@ -18,6 +18,8 @@
                 <div><label> User Name : <input type="text" name="username"/> </label></div>
                 <div><label> Password: <input type="password" name="password"/> </label></div>
                 <div><input class="btn btn-primary" type="submit" value="Sign In"/></div>
+                <div><label>Remember me:</label></div>
+                <div><input  id="remember-me" type="checkbox" name="remember-me" /></div>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <c:if test="${not empty loginError}">
                     <br>

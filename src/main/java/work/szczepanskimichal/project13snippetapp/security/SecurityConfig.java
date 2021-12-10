@@ -1,10 +1,12 @@
 package work.szczepanskimichal.project13snippetapp.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
@@ -20,10 +22,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .and().formLogin()
                 .loginPage("/login")
+                .and().rememberMe().userDetailsService(customUserDetailsService()).tokenValiditySeconds(60*60*24*30)
                 .and().logout().logoutSuccessUrl("/")
                 .permitAll()
-//                .and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
                 .and().exceptionHandling().accessDeniedPage("/403");
+
     }
 
 //    encrypting passwords

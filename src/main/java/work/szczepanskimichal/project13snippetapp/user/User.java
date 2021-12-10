@@ -47,7 +47,7 @@ public class User {
     @ManyToOne
     private Role role;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.REMOVE)
     private List<Tag> tags;
 
     private String apiKey;
