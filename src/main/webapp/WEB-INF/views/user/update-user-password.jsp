@@ -22,8 +22,7 @@
                 <form:password name="password" path="password"/><br>
                 <b>Confirm password</b><br>
                 <form:password name="passwordConfirmation" path="passwordConfirmation"/><br><br>
-                <br>dziura<br>
-                <form:errors path="password"/><br>
+                <form:errors cssClass="d-block mt-2 alert alert-danger" path="password"/><br>
 
                 <input type="submit">
             </form:form>

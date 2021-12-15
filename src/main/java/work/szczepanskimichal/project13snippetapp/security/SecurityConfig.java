@@ -1,5 +1,4 @@
 package work.szczepanskimichal.project13snippetapp.security;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,11 +16,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/login", "/create-account/**").not().hasAnyRole("USER", "ADMIN")
+                .antMatchers("/").permitAll()
                 .and().formLogin()
                 .loginPage("/login")
+                .and().rememberMe().userDetailsService(customUserDetailsService()).tokenValiditySeconds(60*60*24*30)
                 .and().logout().logoutSuccessUrl("/")
                 .permitAll()
                 .and().exceptionHandling().accessDeniedPage("/403");
+
     }
 
 //    encrypting passwords

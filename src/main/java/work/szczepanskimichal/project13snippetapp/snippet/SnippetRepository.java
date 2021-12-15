@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import work.szczepanskimichal.project13snippetapp.tag.Tag;
 import work.szczepanskimichal.project13snippetapp.user.User;
 
+import javax.mail.Folder;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public interface SnippetRepository extends JpaRepository<Snippet, Long> {
     // crud
     Snippet save(Snippet snippet);
     void delete(Snippet snippet);
+    boolean existsById(Long id);
     void deleteById(Long id);
 
     // admin master queries (public nad private)
@@ -43,8 +45,19 @@ public interface SnippetRepository extends JpaRepository<Snippet, Long> {
     List<Snippet> findAllPublicSnippetsbyOwnerHandle(String handle);
 
     // user general queries
-    List<Snippet> findSnippetsByIdAndOwnerEquals(Long id, User owner);
-//    List<Snippet> findSnippetsByVisibility(String visibility);
+//    List<Snippet> findSnippetsByIdAndOwnerEquals(Long id, User owner);
+
+    @Query("select s from Snippet s where s.owner.email like %?1%")
+    List<Snippet> findAllUserSnippets(String email);
+
+    @Query("select distinct s.folder from Snippet s where s.owner.email like %?1%")
+    List<String> findAllFoldersOfUser(String email);
+
+    List<Snippet> findSnippetsByFolderAndOwner(String folder, User owner);
+
+
+
+;//    List<Snippet> findSnippetsByVisibility(String visibility);
 //    List<Snippet> findSnippetsByProgrammingLanguage(String programmingLanugage);
 //    List<Snippet> findSnippetsByFolder(String folder);
 //    List<Snippet> findSnippetsByTitle(String title);

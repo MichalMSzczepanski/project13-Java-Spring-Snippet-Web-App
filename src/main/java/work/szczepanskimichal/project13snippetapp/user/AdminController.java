@@ -1,5 +1,6 @@
 package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ public class AdminController {
     private final RoleService roleService;
     private final SimpleKeyGenerator simpleKeyGenerator;
     private final EmailService emailService;
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //    TODO details in admin dashboard
     @GetMapping("/dashboard")
@@ -53,9 +55,11 @@ public class AdminController {
         if (result.hasErrors()) {
             return "admin/create-account";
         }
-        User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+//        User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+        User user = userMapper.CreateUserDTOtoUser(createUserDTO);
         user.setEnabled(createUserDTO.getEnabled());
         user.setRole(createUserDTO.getRole());
+        user.setAccountKeyCreated(LocalDateTime.now());
         if(emailConfirmationFollowUp.equals("yes")) {
             String key = simpleKeyGenerator.generateAccountKey();
             user.setAccountKey(key);
@@ -92,7 +96,6 @@ public class AdminController {
     public String updateUserPasswordGet(Model model) {
         model.addAttribute("userPasswords", new UserPasswordUpdateDTO());
         return "admin/update-admin-password";
-        //    TODO send email with link to change password?
     }
 
     @PostMapping("/update-admin-password")
@@ -106,29 +109,37 @@ public class AdminController {
         return "redirect:/";
     }
 
-    @GetMapping("/manage-user-accounts")
-    public String manageUserAccountsGet(Model model) {
-        model.addAttribute("userList", userService.getAllUsers());
-        return "admin/manage-user-accounts";
+    @GetMapping("/manage-user-accounts/{pageNumber}")
+    public String manageUserAccountsGet(Model model, @PathVariable int pageNumber) {
+        if (!(userService.getUsersForAdmin(pageNumber) == null)) {
+            model.addAttribute("userList", userService.getUsersForAdmin(pageNumber));
+            model.addAttribute("numberOfUsers", userService.countAllUsers());
+            return "admin/manage-user-accounts";
+        } else {
+            return "redirect:/admin/manage-user-accounts/1";
+        }
     }
 
     @GetMapping("/edit-user/{id}")
     public String editUserAccountGet(@PathVariable Long id, Model model) {
-        AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
+//        AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
+        AdminUpdateUserDTO adminUpdateUserDTO = userMapper.UsertoAdminUpdateUserDTO(userService.findByUserId(id));
         adminUpdateUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
         model.addAttribute("adminUpdateUserDTO", adminUpdateUserDTO);
+        System.out.println("test object contents: " + adminUpdateUserDTO);
         return "admin/edit-user";
     }
 
-// TODO walidator do DTO dla maila u username'a ponizej
     @PostMapping("/edit-user/{id}")
     public String editUserAccountPost(@Valid AdminUpdateUserDTO adminUpdateUserDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
-            System.out.println(adminUpdateUserDTO.getPasswordConfirmation());
+//            TBC validation and below code
+//            userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO);
+//            adminUpdateUserDTO.getPasswordConfirmation();
             return "admin/edit-user";
         }
-        userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
+        userService.update(userMapper.AdminUpdateUserDTOtoUser(adminUpdateUserDTO));
+//        userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
         return "redirect:/admin/user-details/" + adminUpdateUserDTO.getId();
     }
 
@@ -138,10 +149,16 @@ public class AdminController {
         return "admin/user-details";
     }
 
+    // TODO test this method and add validation if you're not deleting yourself!
     @GetMapping("/delete/{id}")
-    public String adminDeleteUser(@PathVariable Long id) {
-        userService.delete(userService.findByUserId(id));
-        return "redirect:/admin/manage-user-accounts";
+    public String adminDeleteUser(@PathVariable Long id, Model model) {
+        if (userService.isThisTheLastAdmin(userService.findByUserId(id))) {
+            model.addAttribute("lastAdminConfirmed", true);
+            return "public/error";
+        } else {
+            userService.delete(userService.findByUserId(id));
+            return "redirect:/admin/manage-user-accounts";
+        }
     }
 
     @ModelAttribute("roleList")

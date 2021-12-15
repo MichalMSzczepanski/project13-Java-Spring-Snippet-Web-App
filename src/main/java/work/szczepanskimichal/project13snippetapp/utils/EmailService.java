@@ -2,6 +2,6 @@ package work.szczepanskimichal.project13snippetapp.utils;
 
 public interface EmailService {
 
-    public void sendEmail(String to, String subject, String content);
+    void sendEmail(String to, String subject, String content);
 
 }

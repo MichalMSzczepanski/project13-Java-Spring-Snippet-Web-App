@@ -1,6 +1,9 @@
 package work.szczepanskimichal.project13snippetapp.tag;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import work.szczepanskimichal.project13snippetapp.utils.Colors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -9,7 +12,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = Tag.TABLE_NAME)
 @Data
-
+@AllArgsConstructor
+@Builder
 public class Tag {
 
     static final String TABLE_NAME = "tags";
@@ -18,16 +22,16 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // can be null
-    // user chooses from bootstrap-centric list
-    @Column(columnDefinition = "varchar(50)")
-    private String tagColor;
-
     @Column(columnDefinition = "varchar(50)")
     @Size(min = 3, max = 50)
     @NotEmpty
     private String tagName;
 
+    @Column(columnDefinition = "varchar(50)")
+    @Enumerated(EnumType.STRING)
+    private Colors tagColor;
 
+    public Tag() {
 
+    }
 }

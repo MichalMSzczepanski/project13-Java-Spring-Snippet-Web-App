@@ -18,15 +18,16 @@
 
                 <b>Username</b> <span title="<spring:message code="username.not.blank.and.unique"/>">&#9432;</span><br>
                 <form:input type="text" path="username"/><br>
-                <form:errors path="username"/><br>
+                <form:errors cssClass="d-block mt-2 alert alert-danger" path="username"/><br>
 
                 <b>Email</b> <span title="<spring:message code="email.not.blank.and.unique"/>">&#9432;</span><br>
                 <form:input type="email" path="email"/><br>
-                <form:errors path="email"/><br>
+                <form:errors cssClass="d-block mt-2 alert alert-danger" path="email"/><br>
 
                 <input type="submit">
             </form:form>
 
+            <a class="btn btn-warning btn-lg" href="/user/delete" role="button">Delete your account</a><br>
             <a class="btn btn-warning btn-lg" href="/" role="button">Homepage</a><br>
 
         </div>

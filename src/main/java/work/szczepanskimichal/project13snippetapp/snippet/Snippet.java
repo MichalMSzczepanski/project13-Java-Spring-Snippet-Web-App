@@ -1,10 +1,8 @@
 package work.szczepanskimichal.project13snippetapp.snippet;
 
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 import work.szczepanskimichal.project13snippetapp.tag.Tag;
 import work.szczepanskimichal.project13snippetapp.user.User;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -33,24 +31,22 @@ public class Snippet {
     private String programmingLanguage;
 
     @Column(columnDefinition = "varchar(255) default 'uncategorized'")
-    @NotBlank
+//    @NotBlank
     private String folder;
 
     @Column(columnDefinition = "varchar(255)")
-    @Size(min = 5, max = 50)
     @NotBlank
+    @Size(min = 5, max = 50)
     private String title;
 
-    // user can save empty snippet
     @Column(columnDefinition = "TEXT")
+    @NotBlank
     @Size(min=5, max=65535)
     private String snippetContent;
 
-    // user chooses checkbox
     @Column(columnDefinition = "BIT default 0")
     private Boolean favorite;
 
-    // automatically created/updated
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
@@ -60,6 +56,7 @@ public class Snippet {
     @ManyToOne
     private User owner;
 
+    @PrePersist
     public void prePersist() {
         createdOn = LocalDateTime.now();
     }
