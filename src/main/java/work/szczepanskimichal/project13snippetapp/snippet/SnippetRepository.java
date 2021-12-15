@@ -55,6 +55,8 @@ public interface SnippetRepository extends JpaRepository<Snippet, Long> {
 
     List<Snippet> findSnippetsByFolderAndOwner(String folder, User owner);
 
+
+
 ;//    List<Snippet> findSnippetsByVisibility(String visibility);
 //    List<Snippet> findSnippetsByProgrammingLanguage(String programmingLanugage);
 //    List<Snippet> findSnippetsByFolder(String folder);

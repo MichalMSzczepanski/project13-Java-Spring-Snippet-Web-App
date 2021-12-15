@@ -7,9 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import work.szczepanskimichal.project13snippetapp.role.RoleConverter;
+
+
 
 import javax.validation.Validator;
 
@@ -56,5 +57,6 @@ public class WebAppConfig implements WebMvcConfigurer {
     public RoleConverter getRoleConverter() {
         return new RoleConverter();
     }
+
 
 }

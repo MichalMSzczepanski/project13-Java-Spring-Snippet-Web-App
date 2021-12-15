@@ -1,5 +1,6 @@
 package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ public class AdminController {
     private final RoleService roleService;
     private final SimpleKeyGenerator simpleKeyGenerator;
     private final EmailService emailService;
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //    TODO details in admin dashboard
     @GetMapping("/dashboard")
@@ -53,7 +55,8 @@ public class AdminController {
         if (result.hasErrors()) {
             return "admin/create-account";
         }
-        User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+//        User user = userService.adminConvertCreateUserDTOToUser(createUserDTO);
+        User user = userMapper.CreateUserDTOtoUser(createUserDTO);
         user.setEnabled(createUserDTO.getEnabled());
         user.setRole(createUserDTO.getRole());
         user.setAccountKeyCreated(LocalDateTime.now());
@@ -119,7 +122,8 @@ public class AdminController {
 
     @GetMapping("/edit-user/{id}")
     public String editUserAccountGet(@PathVariable Long id, Model model) {
-        AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
+//        AdminUpdateUserDTO adminUpdateUserDTO = userService.adminConvertUserToAdminUpdateUserDTO(userService.findByUserId(id));
+        AdminUpdateUserDTO adminUpdateUserDTO = userMapper.UsertoAdminUpdateUserDTO(userService.findByUserId(id));
         adminUpdateUserDTO.setPasswordConfirmation((userService.findByUserId(id)).getPassword());
         model.addAttribute("adminUpdateUserDTO", adminUpdateUserDTO);
         System.out.println("test object contents: " + adminUpdateUserDTO);
@@ -134,7 +138,8 @@ public class AdminController {
 //            adminUpdateUserDTO.getPasswordConfirmation();
             return "admin/edit-user";
         }
-        userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
+        userService.update(userMapper.AdminUpdateUserDTOtoUser(adminUpdateUserDTO));
+//        userService.update(userService.convertAdminUpdateUserDTOToUser(adminUpdateUserDTO));
         return "redirect:/admin/user-details/" + adminUpdateUserDTO.getId();
     }
 

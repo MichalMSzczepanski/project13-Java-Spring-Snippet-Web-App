@@ -1,6 +1,5 @@
 package work.szczepanskimichal.project13snippetapp.user;
 
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -86,79 +85,79 @@ public class UserService {
         return false;
     }
 
-    public User convertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
-        User user = new User();
-        user.setId(createUserDTO.getId()); // added
-        user.setEmail(createUserDTO.getEmail());
-        user.setUsername(createUserDTO.getUsername());
-        user.setPassword(createUserDTO.getPassword());
-        user.setEnabled(0);
-        user.setRole(createUserDTO.getRole()); // added
-        user.setApiKey(keyGenerator.generateApiKey());
-        user.setAccountKey(keyGenerator.generateAccountKey());
-        user.setAccountKeyCreated(LocalDateTime.now());
-        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
-        return user;
-    }
+//    public User convertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
+//        User user = new User();
+//        user.setId(createUserDTO.getId()); // added
+//        user.setEmail(createUserDTO.getEmail());
+//        user.setUsername(createUserDTO.getUsername());
+//        user.setPassword(createUserDTO.getPassword());
+//        user.setEnabled(0);
+//        user.setRole(createUserDTO.getRole()); // added
+//        user.setApiKey(keyGenerator.generateApiKey());
+//        user.setAccountKey(keyGenerator.generateAccountKey());
+//        user.setAccountKeyCreated(LocalDateTime.now());
+//        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
+//        return user;
+//    }
 
-    public User convertAdminUpdateUserDTOToUser(AdminUpdateUserDTO adminUpdateUserDTO) {
-        User user = new User();
-        user.setId(adminUpdateUserDTO.getId()); // added
-        user.setEmail(adminUpdateUserDTO.getEmail());
-        user.setUsername(adminUpdateUserDTO.getUsername());
-        user.setPassword(adminUpdateUserDTO.getPassword());
-        user.setEnabled(0);
-        user.setRole(adminUpdateUserDTO.getRole()); // added
-        user.setApiKey(keyGenerator.generateApiKey());
-        user.setAccountKey(null);
-        user.setAccountKeyCreated(adminUpdateUserDTO.getAccountKeyCreated());
-        user.setAccountKeyExpirationDate(null);
-        return user;
-    }
+//    public User convertAdminUpdateUserDTOToUser(AdminUpdateUserDTO adminUpdateUserDTO) {
+//        User user = new User();
+//        user.setId(adminUpdateUserDTO.getId()); // added
+//        user.setEmail(adminUpdateUserDTO.getEmail());
+//        user.setUsername(adminUpdateUserDTO.getUsername());
+//        user.setPassword(adminUpdateUserDTO.getPassword());
+//        user.setEnabled(0);
+//        user.setRole(adminUpdateUserDTO.getRole()); // added
+//        user.setApiKey(keyGenerator.generateApiKey());
+//        user.setAccountKey(null);
+//        user.setAccountKeyCreated(adminUpdateUserDTO.getAccountKeyCreated());
+//        user.setAccountKeyExpirationDate(null);
+//        return user;
+//    }
 
-    public User adminConvertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
-        User user = new User();
-        user.setEmail(createUserDTO.getEmail());
-        user.setUsername(createUserDTO.getUsername());
-        user.setPassword(createUserDTO.getPassword());
-        user.setEnabled(1);
-        user.setRole(createUserDTO.getRole());
-        user.setApiKey(createUserDTO.getApiKey());
-        user.setAccountKey(null);
-//        user.setAccountKeCreated(null);
-        user.setAccountKeyExpirationDate(null);
-        return user;
-    }
+//    public User adminConvertCreateUserDTOToUser(CreateUserDTO createUserDTO) {
+//        User user = new User();
+//        user.setEmail(createUserDTO.getEmail());
+//        user.setUsername(createUserDTO.getUsername());
+//        user.setPassword(createUserDTO.getPassword());
+//        user.setEnabled(1);
+//        user.setRole(createUserDTO.getRole());
+//        user.setApiKey(createUserDTO.getApiKey());
+//        user.setAccountKey(null);
+////        user.setAccountKeCreated(null);
+//        user.setAccountKeyExpirationDate(null);
+//        return user;
+//    }
 
-    public CreateUserDTO adminConvertUserToCreateUserDTO(User user) {
-        CreateUserDTO createUserDTO = new CreateUserDTO();
-        createUserDTO.setId(user.getId());
-        createUserDTO.setEmail(user.getEmail());
-        createUserDTO.setUsername(user.getUsername());
-        createUserDTO.setPassword(user.getPassword());
-        createUserDTO.setEnabled(user.getEnabled());
-        createUserDTO.setRole(user.getRole());
-        createUserDTO.setApiKey(user.getApiKey());
-        createUserDTO.setAccountKey(user.getAccountKey());
-        createUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
-        createUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
-        return createUserDTO;
-    }
+//    public CreateUserDTO adminConvertUserToCreateUserDTO(User user) {
+//        CreateUserDTO createUserDTO = new CreateUserDTO();
+//        createUserDTO.setId(user.getId());
+//        createUserDTO.setEmail(user.getEmail());
+//        createUserDTO.setUsername(user.getUsername());
+//        createUserDTO.setPassword(user.getPassword());
+//        createUserDTO.setEnabled(user.getEnabled());
+//        createUserDTO.setRole(user.getRole());
+//        createUserDTO.setApiKey(user.getApiKey());
+//        createUserDTO.setAccountKey(user.getAccountKey());
+//        createUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
+//        createUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
+//        return createUserDTO;
+//    }
 
-    public AdminUpdateUserDTO adminConvertUserToAdminUpdateUserDTO(User user) {
-        AdminUpdateUserDTO adminUpdateUserDTO = new AdminUpdateUserDTO();
-        adminUpdateUserDTO.setId(user.getId());
-        adminUpdateUserDTO.setEmail(user.getEmail());
-        adminUpdateUserDTO.setUsername(user.getUsername());
-        adminUpdateUserDTO.setPassword(user.getPassword());
-        adminUpdateUserDTO.setEnabled(user.getEnabled());
-        adminUpdateUserDTO.setRole(user.getRole());
-        adminUpdateUserDTO.setApiKey(user.getApiKey());
-        adminUpdateUserDTO.setAccountKey(user.getAccountKey());
-        adminUpdateUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
-        adminUpdateUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
-        return adminUpdateUserDTO;
-    }
+//    public AdminUpdateUserDTO adminConvertUserToAdminUpdateUserDTO(User user) {
+//        AdminUpdateUserDTO adminUpdateUserDTO = new AdminUpdateUserDTO();
+//        adminUpdateUserDTO.setId(user.getId());
+//        adminUpdateUserDTO.setEmail(user.getEmail());
+//        adminUpdateUserDTO.setUsername(user.getUsername());
+//        adminUpdateUserDTO.setPassword(user.getPassword());
+//        adminUpdateUserDTO.setEnabled(user.getEnabled());
+//        adminUpdateUserDTO.setRole(user.getRole());
+//        adminUpdateUserDTO.setApiKey(user.getApiKey());
+//        adminUpdateUserDTO.setAccountKey(user.getAccountKey());
+//        adminUpdateUserDTO.setAccountKeyCreated(user.getAccountKeyCreated());
+//        adminUpdateUserDTO.setAccountKeyExpirationDate(user.getAccountKeyExpirationDate());
+//        return adminUpdateUserDTO;
+//    }
 
     public long countAllUsers() {
         return userRepository.count();
