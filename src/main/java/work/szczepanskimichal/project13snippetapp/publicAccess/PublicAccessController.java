@@ -12,7 +12,9 @@ import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserMapper;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
 import work.szczepanskimichal.project13snippetapp.utils.EmailService;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -43,10 +45,17 @@ public class PublicAccessController {
     }
 
     @GetMapping("/logout")
-    public String logout() {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         log.info("user logged out: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-//        doesn't redirect to homepage BUT login
+        Cookie[] cookies = request.getCookies();
+        if(cookies!=null)
+            for(Cookie cookie : cookies) {
+                if(cookie.getName().equals("remember-me")) {
+                    cookie.setMaxAge(0);
+                    response.addCookie(cookie);
+                }
+            }
         return "redirect:/";
     }
 
@@ -84,6 +93,5 @@ public class PublicAccessController {
     public String notAllowed403() {
         return "public/403";
     }
-
 
 }
