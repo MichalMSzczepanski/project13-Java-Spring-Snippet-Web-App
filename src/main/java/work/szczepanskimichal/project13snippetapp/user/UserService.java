@@ -97,7 +97,6 @@ public class UserService {
             Page<User> userPage = userRepository.findAll(PageRequest.of(pageNumber - 1, 10));
             return userPage.getContent();
         }
-
     }
 
 }
