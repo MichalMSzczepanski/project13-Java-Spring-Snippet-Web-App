@@ -71,6 +71,7 @@ public class PublicAccessController {
             return "public/create-account";
         }
         User user = userMapper.createUserDTOtoUser(createUserDTO);
+        userService.initialUserSetup(user);
         emailService.sendEmail(user.getEmail(), "Snippet App Email Confirmation", "You have 24h to confirm your email at: http://localhost:8080/create-account/confirmation/" + user.getAccountKey());
         userService.saveUser(user);
         return "public/confirm-user-email";

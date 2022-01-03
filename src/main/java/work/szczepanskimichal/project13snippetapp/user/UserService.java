@@ -27,6 +27,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void initialUserSetup(User user) {
+        user.setRole(roleRepository.getById(1));
+        user.setAccountKeyCreated(LocalDateTime.now());
+        user.setAccountKeyExpirationDate(LocalDateTime.now().plusDays(1));
+        user.setAccountKey(keyGenerator.generateAccountKey());
+    }
+
     public void adminSaveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

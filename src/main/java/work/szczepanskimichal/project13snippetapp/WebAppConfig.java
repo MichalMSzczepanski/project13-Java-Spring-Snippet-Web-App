@@ -8,11 +8,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import work.szczepanskimichal.project13snippetapp.role.RoleConverter;
-
-
-
-import javax.validation.Validator;
+import work.szczepanskimichal.project13snippetapp.role.*;
 
 @SpringBootApplication
 public class WebAppConfig implements WebMvcConfigurer {
@@ -29,7 +25,6 @@ public class WebAppConfig implements WebMvcConfigurer {
 //        registry.addViewController("/403").setViewName("403");
 //    }
 
-//    validator & messaging settings
     @Bean
     public LocalValidatorFactoryBean getValidator() {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
@@ -46,17 +41,15 @@ public class WebAppConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-// converter settings
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(getRoleConverter());
+//    @Override
+//    public void addFormatters(FormatterRegistry registry) {
+//        registry.addConverter(getRoleConverter());
+//
+//    }
 
-    }
-
-    @Bean
-    public RoleConverter getRoleConverter() {
-        return new RoleConverter();
-    }
-
+//    @Bean
+//    public RoleConverter getRoleConverter() {
+//        return new RoleConverter();
+//    }
 
 }
