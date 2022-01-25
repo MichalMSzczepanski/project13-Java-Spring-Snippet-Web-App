@@ -6,8 +6,11 @@ import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
 
 @Mapper
 public interface UserMapper {
+
     User createUserDTOtoUser(CreateUserDTO createUserDTO);
+
     User AdminUpdateUserDTOtoUser(AdminUpdateUserDTO adminUpdateUserDTO);
+
     User CreateUserDTOtoUser(CreateUserDTO createUserDTO);
 
     AdminUpdateUserDTO UsertoAdminUpdateUserDTO(User user);

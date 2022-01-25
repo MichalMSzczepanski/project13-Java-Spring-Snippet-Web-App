@@ -5,15 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import work.szczepanskimichal.project13snippetapp.role.*;
 
 @SpringBootApplication
 public class WebAppConfig implements WebMvcConfigurer {
 
-//    main application method
     public static void main(String[] args) {
         SpringApplication.run(WebAppConfig.class, args);
     }
@@ -43,13 +40,10 @@ public class WebAppConfig implements WebMvcConfigurer {
 
 //    @Override
 //    public void addFormatters(FormatterRegistry registry) {
-//        registry.addConverter(getRoleConverter());
+//        registry.addConverter(getRoleConverter());e
 //
 //    }
 
-//    @Bean
-//    public RoleConverter getRoleConverter() {
-//        return new RoleConverter();
-//    }
+
 
 }

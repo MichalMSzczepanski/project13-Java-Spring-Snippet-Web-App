@@ -11,8 +11,15 @@ import java.awt.print.Pageable;
 @Repository
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
+
     User findByUsername(String username);
+
     User findByEmail(String email);
+
     User findByAccountKey(String key);
+
     Integer countAllByRole(Role role);
+
+    Boolean existsByEmail(String email);
+
 }

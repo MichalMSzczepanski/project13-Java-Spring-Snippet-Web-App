@@ -3,12 +3,15 @@ package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.project13snippetapp.role.RoleRepository;
-import work.szczepanskimichal.project13snippetapp.user.DTO.AdminUpdateUserDTO;
-import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordResetDTO;
+import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 import work.szczepanskimichal.project13snippetapp.utils.KeyGenerator;
+
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final KeyGenerator keyGenerator;
+    private final EmailService emailService;
 
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -58,7 +62,7 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-
+    
     public void update(User user) {
         userRepository.save(user);
     }
@@ -104,6 +108,30 @@ public class UserService {
             Page<User> userPage = userRepository.findAll(PageRequest.of(pageNumber - 1, 10));
             return userPage.getContent();
         }
+    }
+
+    @Transactional
+    public void emailPasswordResetLink(String email) {
+        String key = keyGenerator.generateAccountKey();
+        emailService.sendEmail(email,"SnippetApp - password reset confirmation", "You have 24h to reset your password at: http://localhost:8080/reset-password/" + key);
+        User user = userRepository.findByEmail(email);
+        user.setAccountKey(key);
+    }
+
+    public Boolean validatePasswordResetKey(String key) {
+        if(userRepository.findByAccountKey(key) != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean emailIsRegistered(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional
+    public void removeUserAccountKey(User user) {
+        user.setAccountKey(null);
     }
 
 }

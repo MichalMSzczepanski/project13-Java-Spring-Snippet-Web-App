@@ -1,20 +1,27 @@
 package work.szczepanskimichal.project13snippetapp.publicAccess;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.mapstruct.factory.Mappers;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import work.szczepanskimichal.project13snippetapp.user.CurrentUser;
 import work.szczepanskimichal.project13snippetapp.user.DTO.CreateUserDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordResetDTO;
 import work.szczepanskimichal.project13snippetapp.user.User;
 import work.szczepanskimichal.project13snippetapp.user.UserMapper;
 import work.szczepanskimichal.project13snippetapp.user.UserService;
 import work.szczepanskimichal.project13snippetapp.utils.EmailService;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -49,9 +56,9 @@ public class PublicAccessController {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
         log.info("user logged out: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Cookie[] cookies = request.getCookies();
-        if(cookies!=null)
-            for(Cookie cookie : cookies) {
-                if(cookie.getName().equals("remember-me")) {
+        if (cookies != null)
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("remember-me")) {
                     cookie.setMaxAge(0);
                     response.addCookie(cookie);
                 }
@@ -79,8 +86,7 @@ public class PublicAccessController {
 
     @GetMapping("/create-account/confirmation/{key}")
     public String confirmAccount(@PathVariable String key) {
-        // TODO check if validation key is expired
-        if(userService.validateAccountKey(key)) {
+        if (userService.validateAccountKey(key)) {
             User user = userService.findByKey(key);
             user.setEnabled(1);
             user.setAccountKey(null);
@@ -89,6 +95,46 @@ public class PublicAccessController {
         }
         return "redirect:/login";
     }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordGet() {
+        return "public/reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPasswordEmailValidation(@RequestParam String email, Model model) {
+        if (email.isEmpty() || !userService.emailIsRegistered(email)) {
+            model.addAttribute("emailNotRegistered", "Email not registered");
+            return "public/reset-password";
+        }
+        userService.emailPasswordResetLink(email);
+        return "redirect:/login";
+    }
+
+    @GetMapping("/reset-password/{key}")
+    public String resetPasswordExecutionGet(@PathVariable String key,
+                                         Model model) {
+        if (userService.validatePasswordResetKey(key)) {
+            UserPasswordResetDTO userPasswordResetDTO = new UserPasswordResetDTO();
+            model.addAttribute("userPasswordResetDTO", userPasswordResetDTO);
+            return "public/reset-password-confirmation";
+        }
+        return "redirect:/login";
+    }
+
+    @Transactional
+    @PostMapping("/reset-password/{key}")
+    public String resetPasswordExecutionPost(@PathVariable String key,
+                                             @Valid UserPasswordResetDTO userPasswordResetDTO,
+                                             BindingResult result) {
+        if (result.hasErrors()) {
+            return "public/reset-password-confirmation";
+        }
+        userService.updatePassword(userService.findByKey(key), userPasswordResetDTO.getPassword());
+        userService.removeUserAccountKey(userService.findByKey(key));
+        return "redirect:/login";
+    }
+
 
     @GetMapping("/403")
     public String notAllowed403() {

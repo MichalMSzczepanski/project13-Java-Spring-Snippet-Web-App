@@ -8,20 +8,23 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserDetailsUpdateDTO;
+import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordResetDTO;
 import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordUpdateDTO;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserController {
+public class UserController{
 
     private final UserService userService;
 
     @GetMapping("/update-user-details")
-    public String updateAccountGet(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
+    public String updateAccountGet(Model model, 
+                                   @AuthenticationPrincipal CurrentUser currentUser) {
         UserDetailsUpdateDTO userDetailsUpdateDTO = new UserDetailsUpdateDTO();
         userDetailsUpdateDTO = userDetailsUpdateDTO.userDTOFilledOut(currentUser);
         model.addAttribute("userDetails", userDetailsUpdateDTO);
@@ -29,7 +32,9 @@ public class UserController {
     }
 
     @PostMapping("/update-user-details")
-    public String updateUserPost(@ModelAttribute("userDetails") @Valid UserDetailsUpdateDTO userDetailsUpdateDTO, BindingResult result, @AuthenticationPrincipal CurrentUser currentUser) {
+    public String updateUserPost(@ModelAttribute("userDetails") @Valid UserDetailsUpdateDTO userDetailsUpdateDTO, 
+                                 BindingResult result, 
+                                 @AuthenticationPrincipal CurrentUser currentUser) {
         if (result.hasErrors()) {
             return "user/update-user-details";
         }
@@ -48,7 +53,10 @@ public class UserController {
     }
 
     @PostMapping("/update-user-password")
-    public String updateUserPasswordPost(@ModelAttribute("userPasswords") @Valid UserPasswordUpdateDTO userPasswordUpdateDTO, BindingResult result, Model model, HttpServletRequest request, @AuthenticationPrincipal CurrentUser currentUser) {
+    public String updateUserPasswordPost(@ModelAttribute("userPasswords") @Valid UserPasswordUpdateDTO userPasswordUpdateDTO, 
+                                         BindingResult result,
+                                         HttpServletRequest request, 
+                                         @AuthenticationPrincipal CurrentUser currentUser) {
         if (result.hasErrors()) {
             return "user/update-user-password";
         }
