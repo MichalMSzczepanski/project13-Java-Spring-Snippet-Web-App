@@ -135,7 +135,6 @@ public class PublicAccessController {
         return "redirect:/login";
     }
 
-
     @GetMapping("/403")
     public String notAllowed403() {
         return "public/403";
