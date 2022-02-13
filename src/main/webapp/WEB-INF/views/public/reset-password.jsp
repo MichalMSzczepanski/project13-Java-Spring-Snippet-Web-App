@@ -24,9 +24,12 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
                 <input type="submit">
+
+                <c:if test="${not empty emailNotRegistered}"><p class="d-block mt-2 alert alert-danger">${emailNotRegistered}</p></c:if>
+
             </form>
 
-            <c:if test="${not empty emailNotRegistered}"><p class="d-block mt-2 alert alert-danger">${emailNotRegistered    }</p></c:if>
+
 
             <a class="btn btn-warning btn-lg" href="/" role="button">Homepage</a><br>
         </div>

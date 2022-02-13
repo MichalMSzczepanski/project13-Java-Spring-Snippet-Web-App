@@ -44,17 +44,17 @@ public class PublicAccessController {
     public String login(HttpServletRequest request) {
         Map<String, String[]> param = request.getParameterMap();
         if (param.containsKey("error")) {
-            log.info("ineffective login from IP: " + request.getRemoteAddr());
+
             request.setAttribute("loginError", true);
         }
-        log.info("user logged in from IP: " + request.getRemoteAddr());
+//        log.info("user logged in from IP: " + request.getRemoteAddr());
         return "public/login";
     }
 
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-        log.info("user logged out: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        log.info("user logged out: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Cookie[] cookies = request.getCookies();
         if (cookies != null)
             for (Cookie cookie : cookies) {

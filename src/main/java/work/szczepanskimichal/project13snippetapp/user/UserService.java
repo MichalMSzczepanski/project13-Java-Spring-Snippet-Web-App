@@ -3,11 +3,9 @@ package work.szczepanskimichal.project13snippetapp.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import work.szczepanskimichal.project13snippetapp.role.RoleRepository;
-import work.szczepanskimichal.project13snippetapp.user.DTO.UserPasswordResetDTO;
 import work.szczepanskimichal.project13snippetapp.utils.EmailService;
 import work.szczepanskimichal.project13snippetapp.utils.KeyGenerator;
 

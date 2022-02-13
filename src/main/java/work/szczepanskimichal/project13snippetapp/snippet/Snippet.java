@@ -50,7 +50,7 @@ public class Snippet {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Tag> tags;
 
     @ManyToOne
