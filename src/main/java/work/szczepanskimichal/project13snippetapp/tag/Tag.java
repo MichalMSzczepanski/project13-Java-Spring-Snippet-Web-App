@@ -3,6 +3,7 @@ package work.szczepanskimichal.project13snippetapp.tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import work.szczepanskimichal.project13snippetapp.utils.Colors;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Size;
 @Table(name = Tag.TABLE_NAME)
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Tag {
 
@@ -31,7 +33,4 @@ public class Tag {
     @Enumerated(EnumType.STRING)
     private Colors tagColor;
 
-    public Tag() {
-
-    }
 }

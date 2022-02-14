@@ -3,8 +3,10 @@ package work.szczepanskimichal.project13snippetapp.user;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import work.szczepanskimichal.project13snippetapp.role.Role;
+import work.szczepanskimichal.project13snippetapp.snippet.Snippet;
 import work.szczepanskimichal.project13snippetapp.tag.Tag;
 import work.szczepanskimichal.project13snippetapp.validator.PasswordMatch;
 import work.szczepanskimichal.project13snippetapp.validator.UniqueEmail;
@@ -48,11 +50,15 @@ public class User {
     private Role role;
 
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.REMOVE)
+    @JoinColumn(name="user_parent_id")
     private List<Tag> tags;
 
     private String apiKey;
+
     private String accountKey;
+
     private LocalDateTime accountKeyCreated;
+
     private LocalDateTime accountKeyExpirationDate;
 
 }

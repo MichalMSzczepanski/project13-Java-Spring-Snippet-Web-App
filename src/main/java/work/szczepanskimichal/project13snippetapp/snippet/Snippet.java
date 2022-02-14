@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = Snippet.TABLE_NAME)
@@ -50,7 +51,8 @@ public class Snippet {
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name="snippet_parent_id")
     private List<Tag> tags;
 
     @ManyToOne
