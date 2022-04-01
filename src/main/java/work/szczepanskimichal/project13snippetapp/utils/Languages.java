@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 //@RequiredArgsConstructor
 public enum Languages {
 
+    NOT_AVAILABLE("N/A"),
     PYTHON("Python"),
     JAVA("Java"),
     C("C"),

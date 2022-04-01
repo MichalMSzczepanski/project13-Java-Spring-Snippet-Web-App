@@ -21,7 +21,6 @@ public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch
         String password = createUserDTO.getPassword();
         String passwordConfirmation = createUserDTO.getPasswordConfirmation();
         if (!password.equals(passwordConfirmation) || password == "" || passwordConfirmation == "") {
-            System.out.println("flag1");
             constraintValidatorContext.buildConstraintViolationWithTemplate("{passwords.dont.match}").addPropertyNode("password").addConstraintViolation();
             return false;
         } else {

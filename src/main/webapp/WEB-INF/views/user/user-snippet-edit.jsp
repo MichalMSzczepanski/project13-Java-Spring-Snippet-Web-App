@@ -41,6 +41,9 @@
             <form:options items="${programmingLanguages}"></form:options>
         </form:select><br><br>
 
+        <b>Link</b><br>
+        <form:input type="text" path="link"/><br>
+
         <b>... or create new folder</b><br>
         <input type="text" name="inputedFolder"><br><br>
 

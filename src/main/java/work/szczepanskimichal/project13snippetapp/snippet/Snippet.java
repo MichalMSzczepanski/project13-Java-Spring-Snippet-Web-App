@@ -58,6 +58,8 @@ public class Snippet {
     @ManyToOne
     private User owner;
 
+    private String link;
+
     @PrePersist
     public void prePersist() {
         createdOn = LocalDateTime.now();
